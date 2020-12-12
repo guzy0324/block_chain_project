@@ -15,22 +15,22 @@ contract Asset {
     function createTable() private {
         TableFactory tf = TableFactory(0x1001);
         // 应收账款表, key : account, field : asset_value
-        // |债权人(主码)|债务人 |金额 |还款日期|挂起   |
-        // |-----------|------|-----|-------|-------|
-        // |creditor   |debtor|value|ddl    |pending|
+        // |债权人(主码)|债务人(主码)|还款日期(主码)|挂起(主码)|金额  |
+        // |-----------|-----------|-------------|---------|-----|
+        // |creditor   |debtor     |ddl          |pending  |value|
         //
         // 创建表
-        tf.createTable("debt", "creditor", "debtor,value,ddl,pending");
+        tf.createTable("debt", "creditor,debtor,ddl,pending", "value");
     }
 
     function openTable() private returns(Table) {
         TableFactory tf = TableFactory(0x1001);
-        Table table = tf.openTable("t_asset");
+        Table table = tf.openTable("debt");
         return table;
     }
 
     /*
-    描述 : 根据资产账户查询资产金额
+    描述 : 根据creditor
     参数 ：
             account : 资产账户
 

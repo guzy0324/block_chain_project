@@ -13,9 +13,12 @@ Be detailed in [2020.docx](https://github.com/guzy0324/block_chain_project/relea
 
 - Database:
 
-    |债权人(主码)|债务人(主码)|还款日期(主码)|挂起(主码)|金额  |
-    |-----------|-----------|-------------|---------|-----|
-    |creditor   |debtor     |ddl          |pending  |value|
+    |主码   |债权人     |债务人      |还款日期     |挂起(主码)|金额    |
+    |------|-----------|-----------|-------------|---------|-------|
+    |id    |creditor   |debtor     |ddl          |pending  |value  |
+    |string|address    |address    |uint256      |address  |uint256|
+
+- 注意！：这个id是因为这个奇怪的数据库需要主码，但实际上无用，所以均设为一个全局变量（这个主码竟然是可以重复的
 
 - 功能一：债权人发起，按主码如有记录直接修改value，否则插入一条记录
 

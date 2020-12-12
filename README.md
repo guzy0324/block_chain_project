@@ -13,9 +13,9 @@ Be detailed in [2020.docx](https://github.com/guzy0324/block_chain_project/relea
 
 - Database:
 
-    |债权人(主码)|债务人 |金额 |还款日期|挂起   |
-    |-----------|------|-----|-------|-------|
-    |creditor   |debtor|value|ddl    |pending|
+    |债权人(主码)|债务人(主码)|还款日期(主码)|挂起(主码)|金额  |
+    |-----------|-----------|-------------|---------|-----|
+    |creditor   |debtor     |ddl          |pending  |value|
 
 - 功能一：债权人发起，插入一条记录
 

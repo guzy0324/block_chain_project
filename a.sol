@@ -8,20 +8,19 @@ contract Asset {
     event TransferEvent(int256 ret, string from_account, string to_account, uint256 amount);
 
     constructor() public {
-        // 构造函数中创建t_asset表
+        // 构造函数中创建debt表
         createTable();
     }
 
     function createTable() private {
         TableFactory tf = TableFactory(0x1001);
-        // 资产管理表, key : account, field : asset_value
-        // |  资产账户(主键)      |     资产金额       |
-        // |-------------------- |-------------------|
-        // |        account      |    asset_value    |
-        // |---------------------|-------------------|
+        // 应收账款表, key : account, field : asset_value
+        // |债权人(主码)|债务人 |金额 |还款日期|挂起   |
+        // |-----------|------|-----|-------|-------|
+        // |creditor   |debtor|value|ddl    |pending|
         //
         // 创建表
-        tf.createTable("t_asset", "account", "asset_value");
+        tf.createTable("debt", "creditor", "debtor,value,ddl,pending");
     }
 
     function openTable() private returns(Table) {

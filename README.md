@@ -18,7 +18,7 @@ Be detailed in [2020.docx](https://github.com/guzy0324/block_chain_project/relea
     |id    |creditor   |debtor     |ddl          |pending  |value  |
     |string|address    |address    |uint256      |address  |uint256|
 
-- 注意！：这个id是因为这个奇怪的数据库需要主码，但实际上无用，所以均设为一个全局变量（这个主码竟然是可以重复的
+    注意！：这个id是因为这个奇怪的数据库需要主码，但实际上无用，所以均设为一个全局变量（这个主码竟然是可以重复的
 
 - 功能一：债权人发起，按主码如有记录直接修改value，否则插入一条记录
 
@@ -27,3 +27,11 @@ Be detailed in [2020.docx](https://github.com/guzy0324/block_chain_project/relea
 - 功能三：债权人发起，向银行账户申请转移债券，设置pending为银行账户；银行可以取消pending（设为0）将债权人改为自己（“改”同样按照功能一的方式先查主码，看是修改哪个）。
 
 - 功能四：债权人发起，（判断时间）删除一条记录
+
+## TODO LIST:
+
+- [x] Database：谷正阳
+- [ ] 功能一：
+- [ ] 功能二：
+- [ ] 功能三：
+- [ ] 功能四：

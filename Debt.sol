@@ -6,13 +6,34 @@ import "./Table.sol";
 contract Debt
 {
     // event
-    event RegisterEvent(int256 ret, string account, uint256 asset_value);
-    event TransferEvent(int256 ret, string from_account, string to_account, uint256 amount);
+    //event RegisterEvent(int256 ret, string account, uint256 asset_value);
+    //event TransferEvent(int256 ret, string from_account, string to_account, uint256 amount);
+
+    enum COMPANY_TYPE {BANK, OTHER}
+    struct Company
+    {
+        COMPANY_TYPE cType;
+    }
+
+    mapping(address => Company) public companies;
 
     constructor() public
     {
         // 构造函数中创建debt表
         createTable();
+    }
+
+    /*
+    描述 : 公司注册
+    参数 ：
+            cType: 公司类型
+    返回值：
+            无
+    */
+
+    function register(uint cType) public
+    {
+        companies[msg.sender].cType = COMPANY_TYPE(cType);
     }
 
     string id = "0";
@@ -36,7 +57,7 @@ contract Debt
         return table;
     }
 
-    struct debt
+    struct Debt
     {
         address creditor;
         address debtor;
@@ -54,7 +75,7 @@ contract Debt
             参数一： 成功返回0, 账户不存在返回-1
             参数二： 第一个参数为0时有效，debt
     */
-    function select() public returns (int256, debt [] memory)
+    function select() public returns (int256, Debt [] memory)
     {
         // 打开表
         Table table = openTable();
@@ -70,12 +91,12 @@ contract Debt
         Entries entries1 = table.select(id, condition);
 
         int256 total_size = entries0.size() + entries1.size();
-        debt[] memory debt_list;
+        Debt[] memory debt_list;
         if (total_size == 0)
         {
             return (-1, debt_list);
         }
-        debt_list = new debt[](uint256(total_size));
+        debt_list = new Debt[](uint256(total_size));
         int256 i = 0;
         Entry entry;
 

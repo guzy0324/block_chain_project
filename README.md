@@ -9,15 +9,18 @@
 
 Be detailed in [2020.docx](https://github.com/guzy0324/block_chain_project/releases/download/v0.0.0/2020.docx).
 
-## Database:
-
-|债权人(主码)|债务人 |金额 |还款日期|挂起   |
-|-----------|------|-----|-------|-------|
-|creditor   |debtor|value|ddl    |pending|
-
 ## Implementation:
 
+- Database:
+
+    |债权人(主码)|债务人 |金额 |还款日期|挂起   |
+    |-----------|------|-----|-------|-------|
+    |creditor   |debtor|value|ddl    |pending|
+
 - 功能一：债权人发起，插入一条记录
+
 - 功能二：债权人发起，减少记录金额，插入一条新记录金额为减少的金额
+
 - 功能三：债权人发起，向银行账户申请转移债券，设置pending为银行账户；银行可以取消pending（设为0）将债权人改为自己。
+
 - 功能四：债权人发起，（判断时间）删除一条记录

@@ -32,6 +32,6 @@ Be detailed in [2020.docx](https://github.com/guzy0324/block_chain_project/relea
 
 - [x] Database：谷正阳
 - [x] 功能一：陈嘉宁
-- [ ] 功能二：
+- [x] 功能二：陈振宇
 - [x] 功能三：陈嘉宁
-- [ ] 功能四：
+- [x] 功能四：陈振宇

@@ -319,4 +319,113 @@ contract Debt
             return -3;
         }
     }
+    
+    /*
+    描述 :  功能三：债权人发起，减少记录金额，插入一条新记录金额为减少的金额（“插入”同样按照功能一的方式先做判断，看是修改还是插入）
+    参数 ：
+            被转让债权人地址，转让债权人地址，债务人地址，还款日期，转让金额
+
+    返回值：
+            参数一： 转让成功返回0，因指定债权记录不存在转让失败返回-1，因指定债权金额不足转让失败返回-2，数据库操作异常返回-3
+    */
+    function creditAssignment(address originCreditor, address destinationCreditor, address debtor, uint256 ddl, uint256 assignmentValue) public returns int256 {
+        int count = 0;
+        // 打开表
+        Table table = openTable();
+
+        Condition condition1 = table.newCondition();
+        condition1.EQ("creditor", int256(originCreditor));
+        condition1.EQ("debtor", int256(debtor));
+        condition1.EQ("ddl", int256(ddl));
+
+        Entries entries =table.select(id, condition1);
+        if (entries.size() == 0) {  //指定债权不存在
+            return -1;
+        }
+        Entry entry1 = entries.get(0);
+        uint256 originValue = uint256(entry1.getInt("value"));
+        if (originValue < assignmentValue) {  //指定债权金额不足
+            return -2;
+        }
+        else if (originValue == assignmentValue) {  //债权金额与转让金额相等
+            //删除旧债权记录
+            count = table.remove(id,condition1);    
+            if (count == 0) {     //数据库操作异常
+                return -3;
+            }
+            //新增转让债权人的新债权记录
+            Entry entry2 = table.newEntry();
+            entry2.set("creditor", destinationCreditor));
+            entry2.set("debtor", debtor);
+            entry2.set("ddl", int256(ddl));
+            entry2.set("pending", 0);
+            entry2.set("value", int256(assignmentValue));
+            count = table.insert(id, entry2);
+            if (count == 0) {     //数据库操作异常
+                return -3;
+            }
+        }
+        else {  //债权金额大于转让金额
+            //删除旧债权记录
+            count = table.remove(id,condition1);    
+            if (count == 0) {     //数据库操作异常
+                return -3;
+            }
+            //新增被转让债权人的新债权记录
+            Entry entry3 = table.newEntry();
+            entry3.set("creditor", originCreditor));
+            entry3.set("debtor", debtor);
+            entry3.set("ddl", ddl);
+            entry3.set("pending", 0);
+            entry3.set("value", originValue - assignmentValue);
+            count = table.insert(id, entry3);
+            if (count == 0) {     //数据库操作异常
+                return -3;
+            }
+            //新增转让债权人的新债权记录
+            Entry entry4 = table.newEntry();
+            entry4.set("creditor", destinationCreditor));
+            entry4.set("debtor", debtor);
+            entry4.set("ddl", ddl);
+            entry4.set("pending", 0);
+            entry4.set("value", assignmentValue);
+            count = table.insert(id, entry4);
+            if (count == 0) {     //数据库操作异常
+                return -3;
+            }
+        }
+        return 0;
+    }
+
+    /*
+    描述 :  功能四：债权人发起，（判断时间）删除一条记录
+    参数 ：
+            债权人地址，债务人地址，还款日期
+
+    返回值：
+            参数一： 删除成功返回0，指定债权记录不存在返回-1，数据库操作异常返回-2
+    */
+    function delete(address creditor, address debtor, uint256 ddl) public returns int256 {
+        int count = 0;
+        // 打开表
+        Table table = openTable();
+
+        Condition condition1 = table.newCondition();
+        condition1.EQ("creditor", int256(creditor));
+        condition1.EQ("debtor", int256(debtor));
+        condition1.EQ("ddl", int256(ddl));
+
+        Entries entries =table.select(id, condition1);
+        if (entries.size() == 0) {  //指定债权记录不存在
+            return -1;
+        }
+
+        count = table.remove(id,condition1);    
+        if (count == 0) {     //数据库操作异常
+            return -3;
+        }
+        return 0;
+    }
+
 }
+

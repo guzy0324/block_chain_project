@@ -31,7 +31,7 @@ Be detailed in [2020.docx](https://github.com/guzy0324/block_chain_project/relea
 ## TODO LIST:
 
 - [x] Database：谷正阳
-- [ ] 功能一：陈嘉宁
+- [x] 功能一：陈嘉宁
 - [ ] 功能二：
-- [ ] 功能三：陈嘉宁
+- [x] 功能三：陈嘉宁
 - [ ] 功能四：

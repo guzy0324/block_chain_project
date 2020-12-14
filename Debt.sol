@@ -73,7 +73,7 @@ contract Debt
 
     返回值：
             参数一： 成功返回0, 账户不存在返回-1
-            参数二： 第一个参数为0时有效，debt
+            参数二： 第一个参数为0时有效，debt_list
     */
     function select() public returns (int256, Debt [] memory)
     {

@@ -124,15 +124,15 @@ contract Debt
     }
 
     /*
-    描述 : 查询相关debt(作为债务人)
+    描述 : 查询相关debt(作为债权人)，这样查出来的debt都是归属于债权人的，即pending为0。这样的记录按道理仅有一条。
     参数 ：
-            债务人地址，还款日期
+            债权人地址，债务人地址，还款日期
 
     返回值：
-            参数一： 成功返回0, 账户不存在返回-1
+            参数一： 成功返回0, debt不存在返回-1
             参数二： 第一个参数为0时有效，当前欠款
     */
-    function selectAsCreditor(address creditor, address debtor, uint256 ddl, uint256 value) public returns (int256, uint256)
+    function selectAsCreditor(address creditor, address debtor, uint256 ddl) private returns (int256, uint256)
     {
         // 打开表
         Table table = openTable();
@@ -143,7 +143,7 @@ contract Debt
         condition.EQ("creditor", int256(creditor));
         condition.EQ("debtor", int256(debtor));
         condition.EQ("ddl", int256(ddl));
-        condition.EQ("pending", int256(pending));
+        condition.EQ("pending", int256(address(0)));
         Entries entries0 = table.select(id, condition);
 
         int256 total_size = entries0.size();
@@ -152,7 +152,7 @@ contract Debt
             return (-1, 0);
         }
         Entry entry;
-        entry = entries1.get(i);
+        entry = entries0.get(0);
         uint256 ret_value = uint256(entry.getInt("value"));
         return (0, ret_value);
     }
@@ -160,31 +160,31 @@ contract Debt
     /*
     描述 :  债权人发起，（债权人，债务人，还款日期）如有则直接修改value，否则插入一条新记录
     参数 ：
-            债权人地址，债务人地址，还款日期，金额
+            债务人地址，还款日期，金额
 
     返回值：
             参数一： 存在相同元组返回0，不存在返回1，修改失败返回-1，添加失败返回-2
             参数二： 当前记录中的欠款数额
     */
-    function addTransaction(address creditor, address debtor, uint256 ddl, uint256 value) public returns(int256, uint256){
+    function addTransaction(address debtor, uint256 ddl, uint256 value) public returns(int256, uint256){
         int256 ret_code = 0;
         int256 ret= 0;
+        uint256 now_value;
         // 打开表
         Table table = openTable();
 
-        Debt[] memory debt_list;
-        (ret, now_value) = selectAsCreditor(debtor, ddl, value);
+        (ret, now_value) = selectAsCreditor(msg.sender, debtor, ddl);
 
         if(ret == -1){
-            Entry entry = table.newentry();
-            entry.set("creditor", creditor);
-            entry.set("debtor", debtor);
-            entry.set("ddl", ddl);
-            entry.set("pending", 0);
-            entry.set("value", value);
+            Entry entry1 = table.newEntry();
+            entry1.set("creditor", msg.sender);
+            entry1.set("debtor", debtor);
+            entry1.set("ddl", ddl);
+            entry1.set("pending", address(0));
+            entry1.set("value", value);
 
-            int count = table.insert(id, entry);
-            if(count == 1){
+            int count1 = table.insert(id, entry1);
+            if(count1 == 1){
                 ret_code = 1;
             }
             else{
@@ -192,21 +192,21 @@ contract Debt
             }
         }
         else{
-            Entry entry = table.newentry();
-            entry.set("creditor", creditor);
-            entry.set("debtor", debtor);
-            entry.set("ddl", ddl);
-            entry.set("pending", pending);
-            entry.set("value", value + now_value);
+            Entry entry2 = table.newEntry();
+            entry2.set("creditor", msg.sender);
+            entry2.set("debtor", debtor);
+            entry2.set("ddl", ddl);
+            entry2.set("pending", address(0));
+            entry2.set("value", value + now_value);
 
             Condition condition = table.newCondition();
-            condition.EQ("creditor", int256(creditor));
+            condition.EQ("creditor", int256(msg.sender));
             condition.EQ("debtor", int256(debtor));
             condition.EQ("ddl", int256(ddl));
-            condition.EQ("pending", int256(pending));
+            condition.EQ("pending", int256(address(0)));
 
-            int count = table.update(id, entry, condition);
-            if(count == 1){
+            int count2 = table.update(id, entry2, condition);
+            if(count2 == 1){
                 ret_code = 0;
             }
             else{
@@ -225,19 +225,20 @@ contract Debt
     返回值：
             参数一： 成功则返回0，若没有可抵消数据则返回-1，可抵消数据>1返回-2，修改失败返回-3
     */
-    function mortgage(address creditor, address debtor, uint256 ddl) public returns(int256){
+    function mortgage(address debtor, uint256 ddl, address pending) public returns(int256){
         int256 ret_code = 0;
-        int256 ret= 0;
+        int256 ret = 0;
         // 打开表
         Table table = openTable();
         // 查询
         Condition condition;
-        condition.EQ("creditor", int256(creditor));
+        condition.EQ("creditor", int256(msg.sender));
         condition.EQ("debtor", int256(debtor));
         condition.EQ("ddl", int256(ddl));
-        condition.EQ("pending", 0);
+        condition.EQ("pending", int256(pending));
         Entries entries0 = table.select(id, condition);
-        uint256 value = entries0[0].getUInt("value");
+        Entry entry1 = entries0.get(0);
+        uint256 value = entry1.getUInt("value");
         int256 total_size = entries0.size();
         if (total_size == 0)
         {
@@ -246,18 +247,17 @@ contract Debt
         else if(total_size > 1){
             return -2;
         }
-        Entry entry = table.newentry();
-        entry.set("creditor", creditor);
+        Entry entry = table.newEntry();
+        entry.set("creditor", msg.sender);
         entry.set("debtor", debtor);
         entry.set("ddl", ddl);
-        entry.set("pending", 1);
+        entry.set("pending", pending);
         entry.set("value", value);
 
-        Condition condition = table.newCondition();
-        condition.EQ("creditor", int256(creditor));
-        condition.EQ("debtor", int256(debtor));
-        condition.EQ("ddl", int256(ddl));
-        condition.EQ("pending", 0);
+        // condition.EQ("creditor", int256(creditor));
+        // condition.EQ("debtor", int256(debtor));
+        // condition.EQ("ddl", int256(ddl));
+        // condition.EQ("pending", int256(address(0)));
 
         int count = table.update(id, entry, condition);
         if(count == 1){
@@ -287,9 +287,10 @@ contract Debt
         condition.EQ("creditor", int256(creditor));
         condition.EQ("debtor", int256(debtor));
         condition.EQ("ddl", int256(ddl));
-        condition.EQ("pending", 1);
+        condition.EQ("pending", int256(msg.sender));
         Entries entries0 = table.select(id, condition);
-        uint256 value = entries0[0].getUInt("value");
+        Entry entry1 = entries0.get(0);
+        uint256 value = entry1.getUInt("value");
         int256 total_size = entries0.size();
         if (total_size == 0)
         {
@@ -298,18 +299,17 @@ contract Debt
         else if(total_size > 1){
             return -2;
         }
-        Entry entry = table.newentry();
-        entry.set("creditor", creditor);
+        Entry entry = table.newEntry();
+        entry.set("creditor", msg.sender);
         entry.set("debtor", debtor);
         entry.set("ddl", ddl);
-        entry.set("pending", 0);
+        entry.set("pending", address(0));
         entry.set("value", value);
 
-        Condition condition = table.newCondition();
-        condition.EQ("creditor", int256(creditor));
-        condition.EQ("debtor", int256(debtor));
-        condition.EQ("ddl", int256(ddl));
-        condition.EQ("pending", 1);
+        // condition.EQ("creditor", int256(creditor));
+        // condition.EQ("debtor", int256(debtor));
+        // condition.EQ("ddl", int256(ddl));
+        // condition.EQ("pending", int256(msg.sender));
 
         int count = table.update(id, entry, condition);
         if(count == 1){
@@ -328,7 +328,7 @@ contract Debt
     返回值：
             参数一： 转让成功返回0，因指定债权记录不存在转让失败返回-1，因指定债权金额不足转让失败返回-2，数据库操作异常返回-3
     */
-    function creditAssignment(address destinationCreditor, address debtor, uint256 ddl, uint256 assignmentValue) public returns int256 {
+    function creditAssignment(address destinationCreditor, address debtor, uint256 ddl, uint256 assignmentValue) public returns (int256) {
         int count = 0;
         // 打开表
         Table table = openTable();
@@ -350,10 +350,10 @@ contract Debt
         else if (originValue == assignmentValue) {  //债权金额与转让金额相等
             //更新转让债权人的新债权记录
             Entry entry2 = table.newEntry();
-            entry2.set("creditor", destinationCreditor));
+            entry2.set("creditor", destinationCreditor);
             entry2.set("debtor", debtor);
             entry2.set("ddl", ddl);
-            entry2.set("pending", 0);
+            entry2.set("pending", address(0));
             entry2.set("value", assignmentValue);
             count = table.update(id, entry2, condition1);
             if (count == 0) {     //数据库操作异常
@@ -363,10 +363,10 @@ contract Debt
         else {  //债权金额大于转让金额
             //更新被转让债权人的新债权记录
             Entry entry3 = table.newEntry();
-            entry3.set("creditor", msg.sender));
+            entry3.set("creditor", msg.sender);
             entry3.set("debtor", debtor);
             entry3.set("ddl", ddl);
-            entry3.set("pending", 0);
+            entry3.set("pending", address(0));
             entry3.set("value", originValue - assignmentValue);
             count = table.update(id, entry3, condition1);
             if (count == 0) {     //数据库操作异常
@@ -374,10 +374,10 @@ contract Debt
             }
             //新增转让债权人的新债权记录
             Entry entry4 = table.newEntry();
-            entry4.set("creditor", destinationCreditor));
+            entry4.set("creditor", destinationCreditor);
             entry4.set("debtor", debtor);
             entry4.set("ddl", ddl);
-            entry4.set("pending", 0);
+            entry4.set("pending", address(0));
             entry4.set("value", assignmentValue);
             count = table.insert(id, entry4);
             if (count == 0) {     //数据库操作异常
@@ -395,7 +395,7 @@ contract Debt
     返回值：
             参数一： 删除成功返回0，指定债权记录不存在返回-1，数据库操作异常返回-2
     */
-    function delete(address debtor, uint256 ddl) public returns int256 {
+    function deleteTransaction(address debtor, uint256 ddl) public returns (int256) {
         int count = 0;
         // 打开表
         Table table = openTable();
@@ -418,4 +418,3 @@ contract Debt
     }
 
 }
-

@@ -6,6 +6,7 @@
 - [初版实现方案](#初版实现方案)
 - [最终实现](#最终实现)
 - [分工](#分工)
+- [测试及结果](#测试及结果)
 
 ## <span id="Requirements">Requirements</span>
 
@@ -50,14 +51,15 @@ Be detailed in [2020.docx](https://github.com/guzy0324/block_chain_project/relea
         |------------|--------|-------|--------|-----|
         |owner       |creditor|debtor |ddl     |value|
         |string      |string  |string |int     |int  |
+        
         其中保证(owner,creditor,debtor,ddl)唯一确定一条记录。
-
         将owner和creditor不一致的欠条定义为挂起态，将一致的欠条定义为正常态。
     - account表
         |用户名(主码)|公司类型|
         |------------|--------|
         |id          |type    |
         |address     |int     |
+        
         其中保证(id)唯一确定一条记录。
 3. <span id="返回码">返回码</span>
     - MORTGAGE_TO_DEBTOR：以欠条向银行抵押，其中欠条的债务人就是这个银行，从而引发错误。
@@ -154,11 +156,11 @@ Be detailed in [2020.docx](https://github.com/guzy0324/block_chain_project/relea
 
 ​		注册过程调用的函数为register( )，以账户1的注册为例展示注册的具体过程如下图：
 
-<img src="F:\各种文件\作业\大三上  区块链\期末\第二步\Pic\registerExample.png" style="zoom:67%;" />
+<img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/registerExample.png" style="zoom:70%;" />
 
 ​		注册过程还设置了保护机制，即无法用同一地址注册两个账户，保证了账户和地址一一对应的关系：
 
-<img src="F:\各种文件\作业\大三上  区块链\期末\第二步\Pic\registerFalseExample.png" style="zoom:70%;" />
+<img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/registerFalseExample.png" style="zoom:70%;" />
 
 ​											
 
@@ -173,51 +175,51 @@ Be detailed in [2020.docx](https://github.com/guzy0324/block_chain_project/relea
 
 ​		创建账单调用的函数为insert( )，以账单1的创建为例展示创建过程如下：
 
-<img src="F:\各种文件\作业\大三上  区块链\期末\第二步\Pic\insertExample.png" style="zoom:70%;" />
+<img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/insertExample.png" style="zoom:70%;" />
 
 ​		且该账单可以被拥有者（即cmp2）通过select( )函数查询：
 
-<img src="F:\各种文件\作业\大三上  区块链\期末\第二步\Pic\selectExample.png" style="zoom:70%;" />
+<img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/selectExample.png" style="zoom:70%;" />
 
 - 这时cmp1试图通过将cmp3的欠款用于抵消其欠cmp2的款项：
 
-  <img src="F:\各种文件\作业\大三上  区块链\期末\第二步\Pic\assignFalseExample.png" style="zoom:70%;" />
+  <img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/assignFalseExample.png" style="zoom:70%;" />
 
   但由于数额超限（cmp3欠款为350，无法用于抵消500的欠款）而无法执行。
 
   调整抵消金额为200后成功执行：
 
-  <img src="F:\各种文件\作业\大三上  区块链\期末\第二步\Pic\assignSucceedExample.png" style="zoom:70%;" />
+  <img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/assignSucceedExample.png" style="zoom:70%;" />
 
   查询cmp1的账单，发现金额改变（由350变为150）：
 
-  <img src="F:\各种文件\作业\大三上  区块链\期末\第二步\Pic\assignSucceedExample1.png" style="zoom:70%;" />
+  <img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/assignSucceedExample1.png" style="zoom:70%;" />
 
   且在bank1的账单中，cmp3的欠款数额增加（由400变为600）：
 
-  <img src="F:\各种文件\作业\大三上  区块链\期末\第二步\Pic\assignSucceedExample2.png" style="zoom:70%;" />
+  <img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/assignSucceedExample2.png" style="zoom:70%;" />
 
 - 这时cmp2试图将与cmp1的账单用于向bank1抵押贷款：
 
-  <img src="F:\各种文件\作业\大三上  区块链\期末\第二步\Pic\mortgageFalseExample.png" style="zoom:70%;" />
+  <img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/mortgageFalseExample.png" style="zoom:70%;" />
 
   但由于数额超限（cmp1欠款为500，无法用于贷款1000）而无法执行。
 
   修改贷款金额为200后成功：
 
-  <img src="F:\各种文件\作业\大三上  区块链\期末\第二步\Pic\mortgageExample.png" style="zoom:70%;" />
+  <img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/mortgageExample.png" style="zoom:70%;" />
 
   执行成功，且cmp2的账单金额发生变化：
 
-  <img src="C:\Users\dell\AppData\Roaming\Typora\typora-user-images\image-20201220205504090.png" alt="image-20201220205504090" style="zoom:70%;" />
+  <img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/mortgageSucceedExample.png" style="zoom:70%;" />
 
   bank1通过permit( )函数接收贷款申请：
 
-  <img src="F:\各种文件\作业\大三上  区块链\期末\第二步\Pic\permitExample.png" style="zoom:70%;" />
+  <img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/permitExample.png" style="zoom:70%;" />
 
   bank1获得了cmp1的账单：
 
-  <img src="F:\各种文件\作业\大三上  区块链\期末\第二步\Pic\permitSucceedExample.png" style="zoom:70%;" />
+  <img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/permitSucceedExample.png" style="zoom:70%;" />
 
 
 

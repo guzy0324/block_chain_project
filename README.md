@@ -6,6 +6,10 @@
 - [初版实现方案](#初版实现方案)
 - [最终实现](#最终实现)
 - [测试及结果](#测试及结果)
+  - [创建账户](#创建账户)
+  - [创建账单](#创建账单)
+  - [抵账和还款](#账单转移)
+  - [贷款](#贷款)
 - [分工](#分工)
 
 ## <span id="Requirements">Requirements</span>
@@ -145,7 +149,9 @@ Be detailed in [2020.docx](https://github.com/guzy0324/block_chain_project/relea
 
 ## <span id=测试及结果>测试及结果</span>
 
-- 在链上部署Debt合约后，首先利用拥有的账户地址进行注册。注册情况如下表所示：
+- <span id=创建账户>创建账户</span>
+
+  在链上部署Debt合约后，首先利用拥有的账户地址进行注册。注册情况如下表所示：
 
   |       | 地址                                       | id    | 类型  |
   | ----- | ------------------------------------------ | ----- | ----- |
@@ -161,6 +167,8 @@ Be detailed in [2020.docx](https://github.com/guzy0324/block_chain_project/relea
   注册过程还设置了保护机制，即无法用同一地址注册两个账户，保证了账户和地址一一对应的关系：
 
   <img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/registerFalseExample.png" style="zoom:70%;" />
+
+- <span id=创建账单>创建账单（功能一）</span>
 
 - 注册完成后，开始创建各个账户之间的账单。完成创建后账单的具体情况如下：
 
@@ -181,7 +189,9 @@ Be detailed in [2020.docx](https://github.com/guzy0324/block_chain_project/relea
 
   该过程实现了要求中的功能一，即实现采购商品—签发应收账款交易上链。交易双方在完成商品交易后通过insert( )函数创建账单并存储在数据库中（上链）。
 
-- 这时cmp1试图通过将cmp3的欠款用于抵消其欠cmp2的款项：
+- <span id=账单转移>抵债和还款（功能二，功能四）</span>
+
+  这时cmp1试图通过将cmp3的欠款用于抵消其欠cmp2的款项：
 
   <img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/assignFalseExample.png" style="zoom:70%;" />
 
@@ -201,7 +211,7 @@ Be detailed in [2020.docx](https://github.com/guzy0324/block_chain_project/relea
 
   该过程实现了要求中的功能二：实现应收账款的转让上链。账户A可用账户B对其的欠款来偿还自己对另一账户C的欠款，从而将将债务关系转移到B与C之间。
 
-  同时assign( )函数亦能够实现还款的功能，只需把传入参数中的“creditor”和“debtor”设为相同的值（且必须是当前账户的债务人），则可实现还款，如下图：
+  同时assign( )函数亦能够实现还款的功能（即功能四），只需把传入参数中的“creditor”和“debtor”设为相同的值（且必须是当前账户的债务人），则可实现还款，如下图：
 
   <img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/assignBack.png" style="zoom:70%;" />
 
@@ -209,7 +219,9 @@ Be detailed in [2020.docx](https://github.com/guzy0324/block_chain_project/relea
 
   <img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/assignBackSucceed.png" style="zoom:70%;" />
 
-- 这时cmp2试图将与cmp1的账单用于向bank1抵押贷款：
+- <span id=贷款>贷款（功能三）</span>
+
+  这时cmp2试图将与cmp1的账单用于向bank1抵押贷款：
 
   <img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/mortgageFalseExample.png" style="zoom:70%;" />
 
@@ -228,8 +240,10 @@ Be detailed in [2020.docx](https://github.com/guzy0324/block_chain_project/relea
   <img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/permitExample.png" style="zoom:70%;" />
 
   bank1获得了cmp1的账单：
-
+  
   <img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/permitSucceedExample.png" style="zoom:70%;" />
+  
+  该过程实现了要求中的功能三：利用应收账款向银行融资上链。账户A可用账户B对其的欠款来向银行贷款，从而将将债务关系转移到B与银行之间。
 
 
 

@@ -1,8 +1,13 @@
 # Block Chain Project
 
-[TOC]
+## TOC
 
-## Requirements
+- [Requirements](#Requirements)
+- [初版实现方案](#初版实现方案)
+- [最终实现](#最终实现)
+- [分工](#分工)
+
+## <span id="Requirements">Requirements</span>
 
 - 功能一：实现采购商品—签发应收账款 交易上链。例如车企从轮胎公司购买一批轮胎并签订应收账款单据。
 - 功能二：实现应收账款的转让上链，轮胎公司从轮毂公司购买一笔轮毂，便将于车企的应收账款单据部分转让给轮毂公司。轮毂公司可以利用这个新的单据去融资或者要求车企到期时归还钱款。
@@ -11,7 +16,7 @@
 
 Be detailed in [2020.docx](https://github.com/guzy0324/block_chain_project/releases/download/v0.0.0/2020.docx).
 
-## 初版实现方案
+## <span id="初版实现方案">初版实现方案</span>
 
 - Database:
     |主码  |债权人      |债务人      |还款日期      |挂起     |金额   |
@@ -25,21 +30,21 @@ Be detailed in [2020.docx](https://github.com/guzy0324/block_chain_project/relea
 - 功能三：债权人发起，向银行账户申请转移债券，设置pending为银行账户；银行可以取消pending（设为0）将债权人改为自己（“改”同样按照功能一的方式先做判断，看是修改哪个）。
 - 功能四：债权人发起，（判断时间）删除一条记录
 
-## 最终实现
+## <span id=最终实现>最终实现</span>
 
-- [数据库](#数据库)
-- [返回码](#返回码)
-- [函数](#函数)
-    - [register](#register)
-    - [select](#select)
-    - [insert_core](#insert_core)
-    - [insert](#insert)
-    - [is_bank](#is_bank)
-    - [mortgage](#mortgage)
-    - [permit](#permit)
-    - [assign](#assign)
-
-1. <span id="数据库">数据库</span>
+1. TOC
+    - [数据库](#数据库)
+    - [返回码](#返回码)
+    - [函数](#函数)
+        - [register](#register)
+        - [select](#select)
+        - [insert_core](#insert_core)
+        - [insert](#insert)
+        - [is_bank](#is_bank)
+        - [mortgage](#mortgage)
+        - [permit](#permit)
+        - [assign](#assign)
+2. <span id="数据库">数据库</span>
     - debt表
         |所有者(主码)|债权人  |债务人 |还款日期|金额 |
         |------------|--------|-------|--------|-----|
@@ -54,7 +59,7 @@ Be detailed in [2020.docx](https://github.com/guzy0324/block_chain_project/relea
         |id          |type    |
         |address     |int     |
         其中保证(id)唯一确定一条记录。
-2. <span id="返回码">返回码</span>
+3. <span id="返回码">返回码</span>
     - MORTGAGE_TO_DEBTOR：以欠条向银行抵押，其中欠条的债务人就是这个银行，从而引发错误。
     - NOT_BANK：当某操作对象必须是银行，但不是银行，引发错误。
     - REGISTERED：该地址已注册账户，引发错误。
@@ -63,7 +68,7 @@ Be detailed in [2020.docx](https://github.com/guzy0324/block_chain_project/relea
     - NOT_EXIST：该欠条不存在，引发错误。
     - DB_ERR：数据库操作出错。
     - SUCC：成功。
-3. <span id="函数">函数</span>
+4. <span id="函数">函数</span>
     - <span id="register">register</span>
         - 描述：公司账户注册
         - 公有：是
@@ -136,7 +141,7 @@ Be detailed in [2020.docx](https://github.com/guzy0324/block_chain_project/relea
         - 返回值
             - [返回码](#返回码)
 
-## 分工
+## <span id=分工>分工</span>
 
 - [x] 实现方案：谷正阳，陈振宇
 - [x] Database：谷正阳

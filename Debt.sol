@@ -5,8 +5,8 @@ import "./Table.sol";
 
 contract Debt
 {
-    uint OTHER = 0;
-    uint BANK = 1;
+    int OTHER = 0;
+    int BANK = 1;
     struct Company
     {
         string id;
@@ -54,7 +54,7 @@ contract Debt
     返回值：
             无
     */
-    function register(string id, uint type) public returns(int)
+    function register(string id, int Type) public returns(int)
     {
         Table table = tf.openTable("account");
         Condition condition = table.newCondition();
@@ -70,7 +70,7 @@ contract Debt
             return ID_EXIST;
         }
         Entry entry = table.newEntry();
-        entry.set("type", type);
+        entry.set("type", Type);
         if (table.insert(id, entry) != 1)
         {
             return DB_ERR;
@@ -108,6 +108,7 @@ contract Debt
         for (uint i = 0; i < uint(entries.size()); i++)
         {
             entry = entries.get(int(i));
+            debt_list[i].owner = companies[msg.sender].id;
             debt_list[i].creditor = entry.getString("creditor");
             debt_list[i].debtor = entry.getString("debtor");
             debt_list[i].ddl = entry.getInt("ddl");
@@ -195,7 +196,7 @@ contract Debt
         }
 
         Entry entry = entries.get(0);
-        uint cur_value = entry.getInt("value");
+        int cur_value = entry.getInt("value");
         if (cur_value < value)
         {
             return OVERFLOW;
@@ -209,7 +210,7 @@ contract Debt
             }
             if (cur_value == value)
             {
-                if (entry.remove(companies[msg.sender].id, condition) != 1)
+                if (table.remove(companies[msg.sender].id, condition) != 1)
                 {
                     return DB_ERR;
                 }

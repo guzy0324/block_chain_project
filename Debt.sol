@@ -5,14 +5,14 @@ import "./Table.sol";
 
 contract Debt
 {
-    int OTHER = 0;
-    int BANK = 1;
     struct Company
     {
         string id;
     }
-
     mapping(address => Company) public companies;
+
+    int OTHER = 0;
+    int BANK = 1;
 
     TableFactory tf;
     constructor() public
@@ -39,21 +39,36 @@ contract Debt
         tf.createTable("account", "id", "type");
     }
 
-    int MORTGAGE_FROM_Debtor = -7
-    int DB_ERR = -6;
-    int OVERFLOW = -5;
-    int BANK_NOT_EXIST = -4;
-    int NOT_EXIST = -3;
-    int ID_EXIST = -2;
-    int REGISTERED = -1;
-    int SUCC = 0;
-    
+
     /*
-    描述 : 公司注册
-    参数 ：
-            cType: 公司类型
-    返回值：
-            无
+    返回码：
+    MORTGAGE_TO_DEBTOR：以欠条向银行抵押，其中欠条的债务人就是这个银行，从而引发错误。
+    NOT_BANK：当某操作对象必须是银行，但不是银行，引发错误。
+    REGISTERED：该地址已注册账户，引发错误。
+    ID_EXIST：注册时该用户名已存在，引发错误。
+    OVERFLOW：转移欠条时，指定金额超出欠条金额，引发错误。
+    NOT_EXIST：该欠条不存在，引发错误。
+    DB_ERR：数据库操作出错。
+    SUCC：成功。
+    */
+    int MORTGAGE_TO_DEBTOR = -7;
+    int NOT_BANK = -6;
+    int REGISTERED = -5;
+    int ID_EXIST = -4;
+    int OVERFLOW = -3;
+    int NOT_EXIST = -2;
+    int DB_ERR = -1;
+    int SUCC = 0;
+
+
+    /*
+        - 描述：公司账户注册
+        - 公有：是
+        - 参数：
+            - id：公司账户名
+            - type：公司类型
+        - 返回值：
+            - 返回码
     */
     function register(string id, int Type) public returns(int)
     {
@@ -65,11 +80,13 @@ contract Debt
         {
             return REGISTERED;
         }
+
         entries = table.select(id, condition);
         if (entries.size() != 0)
         {
             return ID_EXIST;
         }
+
         Entry entry = table.newEntry();
         entry.set("type", Type);
         if (table.insert(id, entry) != 1)
@@ -79,6 +96,7 @@ contract Debt
         companies[msg.sender].id = id;
         return SUCC;
     }
+
 
     struct DEBT
     {
@@ -90,13 +108,11 @@ contract Debt
     }
 
     /*
-    描述 : 查询相关debt
-    参数 ：
-            无
-
-    返回值：
-            参数一： 成功返回0, 账户不存在返回-1
-            参数二： 第一个参数为0时有效，debt_list
+        - 描述：查询所有者为自己的全部debt
+        - 公有：是
+        - 参数：无
+        - 返回值：
+            - DEBT数组
     */
     function select() public returns (DEBT [] memory)
     {
@@ -120,32 +136,35 @@ contract Debt
 
 
     /*
-    描述 :  债权人发起，（债权人，债务人，还款日期）如有则直接修改value，否则插入一条新记录
-    参数 ：
-            债务人地址，还款日期，金额
-
-    返回值：
-            参数一： 存在相同元组返回0，不存在返回1，修改失败返回-1，添加失败返回-2
-            参数二： 当前记录中的欠款数额
+        - 描述：添加一个欠条，如果存在相关欠条更新其value，否则插入一条新的欠条
+        - 公有：否
+        - 参数：
+            - id：欠条的onwner
+            - creditor：欠条的creditor
+            - debtor：欠条的debtor
+            - ddl：欠条的ddl
+            - value：欠条的value
+        - 返回值：
+            - 返回码
     */
-    function addTransaction(string debtor, int ddl, int value) public returns (int)
+    function insert_core(string id, string creditor, string debtor, int ddl, int value) private returns (int)
     {
         Table table = tf.openTable("debt");
         Condition condition = table.newCondition();
-        condition.EQ("creditor", companies[msg.sender].id);
+        condition.EQ("creditor", creditor);
         condition.EQ("debtor", debtor);
         condition.EQ("ddl", ddl);
-        Entries entries = table.select(companies[msg.sender].id, condition);
+        Entries entries = table.select(id, condition);
 
         Entry entry;
         if (entries.size() == 0)
         {
             entry = table.newEntry();
-            entry.set("creditor", companies[msg.sender].id);
+            entry.set("creditor", creditor);
             entry.set("debtor", debtor);
             entry.set("ddl", ddl);
             entry.set("value", value);
-            if (table.insert(companies[msg.sender].id, entry) != 1)
+            if (table.insert(id, entry) != 1)
             {
                 return DB_ERR;
             }
@@ -154,7 +173,7 @@ contract Debt
         {
             entry = entries.get(0);
             entry.set("value", entry.getInt("value") + value);
-            if (table.update(companies[msg.sender].id, entry, condition) != 1)
+            if (table.update(id, entry, condition) != 1)
             {
                 return DB_ERR;
             }
@@ -164,18 +183,31 @@ contract Debt
 
 
     /*
-    描述 :  债权人发起，向银行账户申请转移债券
-    参数 ：
-            债权人地址，债务人地址，还款日期
-
-    返回值：
-            参数一： 成功则返回0，若没有可抵消数据则返回-1，修改失败返回-2
+        - 描述：添加一个欠条，其中owner和creditor均为自己
+        - 公有：是
+        - 参数：
+            - debtor：欠条的debtor
+            - ddl：欠条的ddl
+            - value：欠条的value
+        - 返回值：
+            - 返回码
     */
-    function mortgage(string bank, string debtor, int ddl, int value) public returns (int)
+    function insert(string debtor, int ddl, int value) public returns (int)
     {
-        if(bank == debtor){
-            return MORTGAGE_FROM_Debtor;
-        }
+        return insert_core(companies[msg.sender].id, companies[msg.sender].id, debtor, ddl, value);
+    }
+
+
+    /*
+        - 描述：判断该公司账户是不是银行
+        - 公有：否
+        - 参数：
+            - bank：判断的公司账户名
+        - 返回值：
+            - 返回码
+    */
+    function is_bank(string bank) private returns (int)
+    {
         Table table;
         Condition condition;
         Entries entries;
@@ -183,17 +215,43 @@ contract Debt
         table = tf.openTable("account");
         condition = table.newCondition();
         condition.EQ("type", BANK);
-        entries = table.select(companies[msg.sender].id, condition);
+        entries = table.select(bank, condition);
         if (entries.size() != 1)
         {
-            return BANK_NOT_EXIST;
+            return NOT_BANK;
+        }
+        return SUCC;
+    }
+
+
+    /*
+        - 描述：用自己的欠条向银行申请抵押，将owner设为银行，creditor仍设为自己，欠条由正常态转变为挂起态。
+        - 公有：是
+        - 参数：
+            - bank：银行账户名
+            - debtor：欠条的debtor
+            - ddl：欠条的ddl
+            - value：需要抵押的value
+        - 返回值：
+            - 返回码
+    */
+    function mortgage(string bank, string debtor, int ddl, int value) public returns (int)
+    {
+        if (keccak256(abi.encodePacked(bank)) == keccak256(abi.encodePacked(debtor)))
+        {
+            return MORTGAGE_TO_DEBTOR;
+        }
+        if (is_bank(bank) == NOT_BANK)
+        {
+            return NOT_BANK;
         }
 
-        table = tf.openTable("debt");
+        Table table = tf.openTable("debt");
+        Condition condition = table.newCondition();
         condition.EQ("creditor", companies[msg.sender].id);
         condition.EQ("debtor", debtor);
         condition.EQ("ddl", ddl);
-        entries = table.select(companies[msg.sender].id, condition);
+        Entries entries = table.select(companies[msg.sender].id, condition);
         if (entries.size() == 0)
         {
             return NOT_EXIST;
@@ -205,67 +263,65 @@ contract Debt
         {
             return OVERFLOW;
         }
-        else
+
+        if (cur_value == value)
         {
-            if (cur_value == value)
-            {
-                if (table.remove(companies[msg.sender].id, condition) != 1)
-                {
-                    return DB_ERR;
-                }
-            }
-            else
-            {
-                entry.set("value", cur_value - value);
-                if (table.update(companies[msg.sender].id, entry, condition) != 1)
-                {
-                    return DB_ERR;
-                }
-            }
-            entry.set("value", value);
-            if (addTransaction(bank, debtor, ddl) != 0)
+            if (table.remove(companies[msg.sender].id, condition) != 1)
             {
                 return DB_ERR;
             }
         }
-        return SUCC;
+        else
+        {
+            entry.set("value", cur_value - value);
+            if (table.update(companies[msg.sender].id, entry, condition) != 1)
+            {
+                return DB_ERR;
+            }
+        }
+
+        return insert_core(bank, companies[msg.sender].id, debtor, ddl, value);
     }
 
 
     /*
-    描述 :  银行可以取消pending（设为0）将债权人改为自己
-    参数 ：
-            债权人地址，债务人地址，还款日期
-
-    返回值：
-            参数一： 成功则返回0，若没有可抵消数据则返回-1，修改失败返回-2
+        - 描述：银行处理指定抵押申请，若同意将creditor设为银行，若拒绝将owner设为申请者，欠条由挂起态转变为正常态。
+        - 公有：是
+        - 参数：
+            - boolean：0为拒绝，非0为同意
+            - creditor：欠条的creaditor
+            - debtor：欠条的debtor
+            - ddl：欠条的ddl
+        - 返回值：
+            - 返回码
     */
-    function redemption(string creditor, string debtor, int ddl) public returns(int)
+    function permit(int boolean, string creditor, string debtor, int ddl) public returns(int)
     {
-        Table table;
-        Condition condition;
-        Entries entries;
-
-        table = tf.openTable("account");
-        condition = table.newCondition();
-        condition.EQ("type", BANK);
-        entries = table.select(companies[msg.sender].id, condition);
-        if (entries.size() != 1)
+        if (is_bank(companies[msg.sender].id) == NOT_BANK)
         {
-            return BANK_NOT_EXIST;
+            return NOT_BANK;
         }
 
-        table = tf.openTable("debt");
+        Table table = tf.openTable("debt");
+        Condition condition = table.newCondition();
         condition.EQ("creditor", creditor);
         condition.EQ("debtor", debtor);
         condition.EQ("ddl", ddl);
-        entries = table.select(companies[msg.sender].id, condition);
+        Entries entries = table.select(companies[msg.sender].id, condition);
         if (entries.size() == 0)
         {
             return NOT_EXIST;
         }
 
         Entry entry = entries.get(0);
+        if (boolean == 0)
+        {
+            if(table.remove(companies[msg.sender].id, condition) != 1)
+            {
+                return DB_ERR;
+            }
+            return insert_core(creditor, creditor, debtor, ddl, entry.getInt("value"));
+        }
         entry.set("creditor", companies[msg.sender].id);
         if (table.update(companies[msg.sender].id, entry, condition) != 1)
         {
@@ -273,132 +329,20 @@ contract Debt
         }
         return SUCC;
     }
-    
-    /*
-    描述 :  功能二：债权人发起，减少记录金额，插入一条新记录金额为减少的金额（“插入”同样按照功能一的方式先做判断，看是修改还是插入）
-    参数 ：
-            转让债权人地址，债务人地址，还款日期，转让金额
 
-    返回值：
-            参数一： 转让成功返回0，因指定债权记录不存在转让失败返回-1，因指定债权金额不足转让失败返回-2，数据库操作异常返回-3
-    */
-    function creditAssignment(string creditor, string debtor, int ddl, int value) public returns (int)
-    {
-        if(creditor != debtor){
-            Table table = tf.openTable("debt");
-            Condition condition = table.newCondition();
-            condition.EQ("creditor", companies[msg.sender].id);
-            condition.EQ("debtor", debtor);
-            condition.EQ("ddl", ddl);
-
-            Entries entries = table.select(companies[msg.sender].id, condition);
-            if (entries.size() == 0)  //指定债权不存在
-            {
-                return NOT_EXIST;
-            }
-            Entry entry = entries.get(0);
-            int cur_value = entry.getInt("value");
-            if (cur_value < value)  //指定债权金额不足
-            {
-                return OVERFLOW;
-            }
-            else  
-            {
-                //债权金额与转让金额相等
-                if(cur_value == value)
-                {
-                    if(table.remove(companies[msg.sender].id, condition) != 1)
-                    {
-                        return DB_ERR;
-                    }
-                }
-                else
-                {
-                    entry = table.newEntry();
-                    entry.set("creditor", companies[msg.sender].id);
-                    entry.set("debtor", debtor);
-                    entry.set("ddl", ddl);
-                    entry.set("value", cur_value - value);
-                    if (table.insert(companies[msg.sender].id, entry) != 1)     //数据库操作异常
-                    {
-                        return DB_ERR;
-                    }
-                }
-                //更新转让债权人的新债权记录
-                entry.set("creditor", creditor);
-                entry.set("value", value);
-                if (addTransaction(creditor, debtor, ddl) != 0)     //数据库操作异常
-                {
-                    return DB_ERR;
-                }
-                
-            }
-            return SUCC;
-        }
-        else
-        {
-            Table table = tf.openTable("debt");
-            Condition condition = table.newCondition();
-            condition.EQ("creditor", companies[msg.sender].id);
-            condition.EQ("debtor", debtor);
-            condition.EQ("ddl", ddl);
-            Entries entries = table.select(companies[msg.sender].id, condition);
-            if (entries.size() == 0)  //指定债权不存在
-            {
-                return NOT_EXIST;
-            }
-            Entry entry = entries.get(0);
-            int cur_value = entry.getInt("value");
-            if (cur_value > value)
-            {
-                entry = table.newEntry();
-                entry.set("creditor", companies[msg.sender].id);
-                entry.set("debtor", debtor);
-                entry.set("ddl", ddl);
-                entry.set("value", cur_value - value);
-                if (table.insert(companies[msg.sender].id, entry) != 1)     //数据库操作异常
-                {
-                    return DB_ERR;
-                }
-            }
-            else
-            {
-                if(cur_value == value)
-                {
-                    if(table.remove(companies[msg.sender].id, condition) != 1)
-                    {
-                        return DB_ERR;
-                    }
-                }
-                else
-                {
-                    entry = table.newEntry();
-                    entry.set("creditor", companies[msg.sender].id);
-                    entry.set("debtor", debtor);
-                    entry.set("ddl", ddl);
-                    entry.set("value", value - cur_value);
-                    if (table.insert(companies[msg.sender].id, entry) != 1)     //数据库操作异常
-                    {
-                        return DB_ERR;
-                    }
-                    if(table.remove(companies[msg.sender].id, condition) != 1)
-                    {
-                        return DB_ERR;
-                    }
-                }
-            }
-        }
-    }
 
     /*
-    描述 :  功能四：债权人发起，（判断时间）删除一条记录
-    参数 ：
-            债权人地址，债务人地址，还款日期
-
-    返回值：
-            参数一： 删除成功返回0，指定债权记录不存在返回-1，数据库操作异常返回-2
+        - 描述：转移部分或全部正常态的欠条给别人，如果目标是欠条的debtor视为还款，如果目标不是欠条的debtor视为交易欠条
+        - 公有：是
+        - 参数：
+            - creditor：转移目标
+            - debtor：欠条的debtor
+            - ddl：欠条的ddl
+            - value：需要转移的value
+        - 返回值：
+            - 返回码
     */
-    function deleteTransaction(string debtor, int ddl) public returns (int)
+    function assign(string creditor, string debtor, int ddl, int value) public returns (int)
     {
         Table table = tf.openTable("debt");
         Condition condition = table.newCondition();
@@ -406,10 +350,38 @@ contract Debt
         condition.EQ("debtor", debtor);
         condition.EQ("ddl", ddl);
 
-        if (table.remove(companies[msg.sender].id, condition) != 1)     //数据库操作异常
+        Entries entries = table.select(companies[msg.sender].id, condition);
+        if (entries.size() == 0)
         {
-            return DB_ERR;
+            return NOT_EXIST;
         }
-        return SUCC;
+        Entry entry = entries.get(0);
+        int cur_value = entry.getInt("value");
+        if (cur_value < value)
+        {
+            return OVERFLOW;
+        }
+
+        if(cur_value == value)
+        {
+            if(table.remove(companies[msg.sender].id, condition) != 1)
+            {
+                return DB_ERR;
+            }
+        }
+        else
+        {
+            entry.set("value", cur_value - value);
+            if (table.update(companies[msg.sender].id, entry, condition) != 1)
+            {
+                return DB_ERR;
+            }
+        }
+
+        if (keccak256(abi.encodePacked(creditor)) == keccak256(abi.encodePacked(debtor)))
+        {
+            return SUCC;
+        }
+        return insert_core(creditor, creditor, debtor, ddl, value);
     }
 }

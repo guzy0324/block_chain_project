@@ -1,0 +1,583 @@
+<!DOCTYPE html><html><head>
+      <title>README</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+      <link rel="stylesheet" href="file:///c:\Users\guzy0\.vscode\extensions\shd101wyy.markdown-preview-enhanced-0.5.13\node_modules\@shd101wyy\mume\dependencies\katex\katex.min.css">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <style>
+      /* http://prismjs.com/download.html?themes=prism-coy&languages=markup+css+clike+javascript+abap+actionscript+ada+apacheconf+apl+applescript+asciidoc+aspnet+autoit+autohotkey+bash+basic+batch+c+brainfuck+bro+bison+csharp+cpp+coffeescript+ruby+css-extras+d+dart+django+diff+docker+eiffel+elixir+erlang+fsharp+fortran+gherkin+git+glsl+go+graphql+groovy+haml+handlebars+haskell+haxe+http+icon+inform7+ini+j+jade+java+jolie+json+julia+keyman+kotlin+latex+less+livescript+lolcode+lua+makefile+markdown+matlab+mel+mizar+monkey+nasm+nginx+nim+nix+nsis+objectivec+ocaml+oz+parigp+parser+pascal+perl+php+php-extras+powershell+processing+prolog+properties+protobuf+puppet+pure+python+q+qore+r+jsx+reason+rest+rip+roboconf+crystal+rust+sas+sass+scss+scala+scheme+smalltalk+smarty+sql+stylus+swift+tcl+textile+twig+typescript+vbnet+verilog+vhdl+vim+wiki+xojo+yaml */
+/**
+ * prism.js Coy theme for JavaScript, CoffeeScript, CSS and HTML
+ * Based on https://github.com/tshedor/workshop-wp-theme (Example: http://workshop.kansan.com/category/sessions/basics or http://workshop.timshedor.com/category/sessions/basics);
+ * @author Tim  Shedor
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: black;
+	background: none;
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	position: relative;
+	margin: .5em 0;
+	box-shadow: -1px 0px 0px 0px #358ccb, 0px 0px 0px 1px #dfdfdf;
+	border-left: 10px solid #358ccb;
+	background-color: #fdfdfd;
+	background-image: linear-gradient(transparent 50%, rgba(69, 142, 209, 0.04) 50%);
+	background-size: 3em 3em;
+	background-origin: content-box;
+	overflow: visible;
+	/* padding: 0; */
+
+	padding-top: 1em;
+    padding-bottom: 1em;
+}
+
+code[class*="language"] {
+	max-height: inherit;
+	height: 100%;
+	padding: 0 1em;
+	display: block;
+	overflow: auto;
+}
+
+/* Margin bottom to accomodate shadow */
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background-color: #fdfdfd;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	margin-bottom: 1em;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	position: relative;
+	padding: .2em;
+	border-radius: 0.3em;
+	color: #c92c2c;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	display: inline;
+	white-space: normal;
+}
+
+pre[class*="language-"]:before,
+pre[class*="language-"]:after {
+	content: '';
+	z-index: -2;
+	display: block;
+	position: absolute;
+	bottom: 0.75em;
+	left: 0.18em;
+	width: 40%;
+	height: 20%;
+	max-height: 13em;
+	box-shadow: 0px 13px 8px #979797;
+	-webkit-transform: rotate(-2deg);
+	-moz-transform: rotate(-2deg);
+	-ms-transform: rotate(-2deg);
+	-o-transform: rotate(-2deg);
+	transform: rotate(-2deg);
+}
+
+:not(pre) > code[class*="language-"]:after,
+pre[class*="language-"]:after {
+	right: 0.75em;
+	left: auto;
+	-webkit-transform: rotate(2deg);
+	-moz-transform: rotate(2deg);
+	-ms-transform: rotate(2deg);
+	-o-transform: rotate(2deg);
+	transform: rotate(2deg);
+}
+
+.token.comment,
+.token.block-comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #7D8B99;
+}
+
+.token.punctuation {
+	color: #5F6364;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.function-name,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #c92c2c;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.function,
+.token.builtin,
+.token.inserted {
+	color: #2f9c0a;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.token.variable {
+	color: #a67f59;
+	background: rgba(255, 255, 255, 0.5);
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword,
+.token.class-name {
+	color: #1990b8;
+}
+
+.token.regex,
+.token.important {
+	color: #e90;
+}
+
+.language-css .token.string,
+.style .token.string {
+	color: #a67f59;
+	background: rgba(255, 255, 255, 0.5);
+}
+
+.token.important {
+	font-weight: normal;
+}
+
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+
+.namespace {
+	opacity: .7;
+}
+
+@media screen and (max-width: 767px) {
+	pre[class*="language-"]:before,
+	pre[class*="language-"]:after {
+		bottom: 14px;
+		box-shadow: none;
+	}
+
+}
+
+/* Plugin styles */
+.token.tab:not(:empty):before,
+.token.cr:before,
+.token.lf:before {
+	color: #e0d7d1;
+}
+
+/* highlight */
+pre[data-line] {
+  position: relative;
+  padding: 1em 0 1em 3em;
+}
+pre[data-line] .line-highlight-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: transparent;
+  display: block;
+  width: 100%;
+}
+
+pre[data-line] .line-highlight {
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding: inherit 0;
+  margin-top: 1em;
+  background: hsla(24, 20%, 50%,.08);
+  background: linear-gradient(to right, hsla(24, 20%, 50%,.1) 70%, hsla(24, 20%, 50%,0));
+  pointer-events: none;
+  line-height: inherit;
+  white-space: pre;
+}
+
+pre[data-line] .line-highlight:before, 
+pre[data-line] .line-highlight[data-end]:after {
+  content: attr(data-start);
+  position: absolute;
+  top: .4em;
+  left: .6em;
+  min-width: 1em;
+  padding: 0 .5em;
+  background-color: hsla(24, 20%, 50%,.4);
+  color: hsl(24, 20%, 95%);
+  font: bold 65%/1.5 sans-serif;
+  text-align: center;
+  vertical-align: .3em;
+  border-radius: 999px;
+  text-shadow: none;
+  box-shadow: 0 1px white;
+}
+
+pre[data-line] .line-highlight[data-end]:after {
+  content: attr(data-end);
+  top: auto;
+  bottom: .4em;
+}html body{font-family:"Helvetica Neue",Helvetica,"Segoe UI",Arial,freesans,sans-serif;font-size:16px;line-height:1.6;color:#333;background-color:#fff;overflow:initial;box-sizing:border-box;word-wrap:break-word}html body>:first-child{margin-top:0}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{line-height:1.2;margin-top:1em;margin-bottom:16px;color:#000}html body h1{font-size:2.25em;font-weight:300;padding-bottom:.3em}html body h2{font-size:1.75em;font-weight:400;padding-bottom:.3em}html body h3{font-size:1.5em;font-weight:500}html body h4{font-size:1.25em;font-weight:600}html body h5{font-size:1.1em;font-weight:600}html body h6{font-size:1em;font-weight:600}html body h1,html body h2,html body h3,html body h4,html body h5{font-weight:600}html body h5{font-size:1em}html body h6{color:#5c5c5c}html body strong{color:#000}html body del{color:#5c5c5c}html body a:not([href]){color:inherit;text-decoration:none}html body a{color:#08c;text-decoration:none}html body a:hover{color:#00a3f5;text-decoration:none}html body img{max-width:100%}html body>p{margin-top:0;margin-bottom:16px;word-wrap:break-word}html body>ul,html body>ol{margin-bottom:16px}html body ul,html body ol{padding-left:2em}html body ul.no-list,html body ol.no-list{padding:0;list-style-type:none}html body ul ul,html body ul ol,html body ol ol,html body ol ul{margin-top:0;margin-bottom:0}html body li{margin-bottom:0}html body li.task-list-item{list-style:none}html body li>p{margin-top:0;margin-bottom:0}html body .task-list-item-checkbox{margin:0 .2em .25em -1.8em;vertical-align:middle}html body .task-list-item-checkbox:hover{cursor:pointer}html body blockquote{margin:16px 0;font-size:inherit;padding:0 15px;color:#5c5c5c;background-color:#f0f0f0;border-left:4px solid #d6d6d6}html body blockquote>:first-child{margin-top:0}html body blockquote>:last-child{margin-bottom:0}html body hr{height:4px;margin:32px 0;background-color:#d6d6d6;border:0 none}html body table{margin:10px 0 15px 0;border-collapse:collapse;border-spacing:0;display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all}html body table th{font-weight:bold;color:#000}html body table td,html body table th{border:1px solid #d6d6d6;padding:6px 13px}html body dl{padding:0}html body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:bold}html body dl dd{padding:0 16px;margin-bottom:16px}html body code{font-family:Menlo,Monaco,Consolas,'Courier New',monospace;font-size:.85em !important;color:#000;background-color:#f0f0f0;border-radius:3px;padding:.2em 0}html body code::before,html body code::after{letter-spacing:-0.2em;content:"\00a0"}html body pre>code{padding:0;margin:0;font-size:.85em !important;word-break:normal;white-space:pre;background:transparent;border:0}html body .highlight{margin-bottom:16px}html body .highlight pre,html body pre{padding:1em;overflow:auto;font-size:.85em !important;line-height:1.45;border:#d6d6d6;border-radius:3px}html body .highlight pre{margin-bottom:0;word-break:normal}html body pre code,html body pre tt{display:inline;max-width:initial;padding:0;margin:0;overflow:initial;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}html body pre code:before,html body pre tt:before,html body pre code:after,html body pre tt:after{content:normal}html body p,html body blockquote,html body ul,html body ol,html body dl,html body pre{margin-top:0;margin-bottom:16px}html body kbd{color:#000;border:1px solid #d6d6d6;border-bottom:2px solid #c7c7c7;padding:2px 4px;background-color:#f0f0f0;border-radius:3px}@media print{html body{background-color:#fff}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{color:#000;page-break-after:avoid}html body blockquote{color:#5c5c5c}html body pre{page-break-inside:avoid}html body table{display:table}html body img{display:block;max-width:100%;max-height:100%}html body pre,html body code{word-wrap:break-word;white-space:pre}}.markdown-preview{width:100%;height:100%;box-sizing:border-box}.markdown-preview .pagebreak,.markdown-preview .newpage{page-break-before:always}.markdown-preview pre.line-numbers{position:relative;padding-left:3.8em;counter-reset:linenumber}.markdown-preview pre.line-numbers>code{position:relative}.markdown-preview pre.line-numbers .line-numbers-rows{position:absolute;pointer-events:none;top:1em;font-size:100%;left:0;width:3em;letter-spacing:-1px;border-right:1px solid #999;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.markdown-preview pre.line-numbers .line-numbers-rows>span{pointer-events:none;display:block;counter-increment:linenumber}.markdown-preview pre.line-numbers .line-numbers-rows>span:before{content:counter(linenumber);color:#999;display:block;padding-right:.8em;text-align:right}.markdown-preview .mathjax-exps .MathJax_Display{text-align:center !important}.markdown-preview:not([for="preview"]) .code-chunk .btn-group{display:none}.markdown-preview:not([for="preview"]) .code-chunk .status{display:none}.markdown-preview:not([for="preview"]) .code-chunk .output-div{margin-bottom:16px}.scrollbar-style::-webkit-scrollbar{width:8px}.scrollbar-style::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}.scrollbar-style::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,0.66);border:4px solid rgba(150,150,150,0.66);background-clip:content-box}html body[for="html-export"]:not([data-presentation-mode]){position:relative;width:100%;height:100%;top:0;left:0;margin:0;padding:0;overflow:auto}html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{position:relative;top:0}@media screen and (min-width:914px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{padding:2em calc(50% - 457px + 2em)}}@media screen and (max-width:914px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{font-size:14px !important;padding:1em}}@media print{html body[for="html-export"]:not([data-presentation-mode]) #sidebar-toc-btn{display:none}}html body[for="html-export"]:not([data-presentation-mode]) #sidebar-toc-btn{position:fixed;bottom:8px;left:8px;font-size:28px;cursor:pointer;color:inherit;z-index:99;width:32px;text-align:center;opacity:.4}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] #sidebar-toc-btn{opacity:1}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc{position:fixed;top:0;left:0;width:300px;height:100%;padding:32px 0 48px 0;font-size:14px;box-shadow:0 0 4px rgba(150,150,150,0.33);box-sizing:border-box;overflow:auto;background-color:inherit}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar{width:8px}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,0.66);border:4px solid rgba(150,150,150,0.66);background-clip:content-box}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc a{text-decoration:none}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc ul{padding:0 1.6em;margin-top:.8em}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc li{margin-bottom:.8em}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc ul{list-style-type:none}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{left:300px;width:calc(100% -  300px);padding:2em calc(50% - 457px -  150px);margin:0;box-sizing:border-box}@media screen and (max-width:1274px){html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{width:100%}}html body[for="html-export"]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .markdown-preview{left:50%;transform:translateX(-50%)}html body[for="html-export"]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .md-sidebar-toc{display:none}
+/* Please visit the URL below for more information: */
+/*   https://shd101wyy.github.io/markdown-preview-enhanced/#/customize-css */
+
+      </style>
+    </head>
+    <body for="html-export">
+      <div class="mume markdown-preview  ">
+      <div><h1 class="mume-header" id="block-chain-project">Block Chain Project</h1>
+
+<ul>
+<li><a href="#block-chain-project">Block Chain Project</a>
+<ul>
+<li><a href="#requirements">Requirements</a></li>
+<li><a href="#%E5%88%9D%E7%89%88%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88">&#x521D;&#x7248;&#x5B9E;&#x73B0;&#x65B9;&#x6848;</a></li>
+<li><a href="#%E6%9C%80%E7%BB%88%E5%AE%9E%E7%8E%B0">&#x6700;&#x7EC8;&#x5B9E;&#x73B0;</a></li>
+<li><a href="#%E5%88%86%E5%B7%A5">&#x5206;&#x5DE5;</a></li>
+</ul>
+</li>
+</ul>
+<h2 class="mume-header" id="requirements">Requirements</h2>
+
+<ul>
+<li>&#x529F;&#x80FD;&#x4E00;&#xFF1A;&#x5B9E;&#x73B0;&#x91C7;&#x8D2D;&#x5546;&#x54C1;&#x2014;&#x7B7E;&#x53D1;&#x5E94;&#x6536;&#x8D26;&#x6B3E; &#x4EA4;&#x6613;&#x4E0A;&#x94FE;&#x3002;&#x4F8B;&#x5982;&#x8F66;&#x4F01;&#x4ECE;&#x8F6E;&#x80CE;&#x516C;&#x53F8;&#x8D2D;&#x4E70;&#x4E00;&#x6279;&#x8F6E;&#x80CE;&#x5E76;&#x7B7E;&#x8BA2;&#x5E94;&#x6536;&#x8D26;&#x6B3E;&#x5355;&#x636E;&#x3002;</li>
+<li>&#x529F;&#x80FD;&#x4E8C;&#xFF1A;&#x5B9E;&#x73B0;&#x5E94;&#x6536;&#x8D26;&#x6B3E;&#x7684;&#x8F6C;&#x8BA9;&#x4E0A;&#x94FE;&#xFF0C;&#x8F6E;&#x80CE;&#x516C;&#x53F8;&#x4ECE;&#x8F6E;&#x6BC2;&#x516C;&#x53F8;&#x8D2D;&#x4E70;&#x4E00;&#x7B14;&#x8F6E;&#x6BC2;&#xFF0C;&#x4FBF;&#x5C06;&#x4E8E;&#x8F66;&#x4F01;&#x7684;&#x5E94;&#x6536;&#x8D26;&#x6B3E;&#x5355;&#x636E;&#x90E8;&#x5206;&#x8F6C;&#x8BA9;&#x7ED9;&#x8F6E;&#x6BC2;&#x516C;&#x53F8;&#x3002;&#x8F6E;&#x6BC2;&#x516C;&#x53F8;&#x53EF;&#x4EE5;&#x5229;&#x7528;&#x8FD9;&#x4E2A;&#x65B0;&#x7684;&#x5355;&#x636E;&#x53BB;&#x878D;&#x8D44;&#x6216;&#x8005;&#x8981;&#x6C42;&#x8F66;&#x4F01;&#x5230;&#x671F;&#x65F6;&#x5F52;&#x8FD8;&#x94B1;&#x6B3E;&#x3002;</li>
+<li>&#x529F;&#x80FD;&#x4E09;&#xFF1A;&#x5229;&#x7528;&#x5E94;&#x6536;&#x8D26;&#x6B3E;&#x5411;&#x94F6;&#x884C;&#x878D;&#x8D44;&#x4E0A;&#x94FE;&#xFF0C;&#x4F9B;&#x5E94;&#x94FE;&#x4E0A;&#x6240;&#x6709;&#x53EF;&#x4EE5;&#x5229;&#x7528;&#x5E94;&#x6536;&#x8D26;&#x6B3E;&#x5355;&#x636E;&#x5411;&#x94F6;&#x884C;&#x7533;&#x8BF7;&#x878D;&#x8D44;&#x3002;</li>
+<li>&#x529F;&#x80FD;&#x56DB;&#xFF1A;&#x5E94;&#x6536;&#x8D26;&#x6B3E;&#x652F;&#x4ED8;&#x7ED3;&#x7B97;&#x4E0A;&#x94FE;&#xFF0C;&#x5E94;&#x6536;&#x8D26;&#x6B3E;&#x5355;&#x636E;&#x5230;&#x671F;&#x65F6;&#x6838;&#x5FC3;&#x4F01;&#x4E1A;&#x5411;&#x4E0B;&#x6E38;&#x4F01;&#x4E1A;&#x652F;&#x4ED8;&#x76F8;&#x5E94;&#x7684;&#x6B20;&#x6B3E;&#x3002;</li>
+</ul>
+<p>Be detailed in <a href="https://github.com/guzy0324/block_chain_project/releases/download/v0.0.0/2020.docx">2020.docx</a>.</p>
+<h2 class="mume-header" id="%E5%88%9D%E7%89%88%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%A1%88">&#x521D;&#x7248;&#x5B9E;&#x73B0;&#x65B9;&#x6848;</h2>
+
+<ul>
+<li>
+<p>Database:</p>
+<table>
+<thead>
+<tr>
+<th>&#x4E3B;&#x7801;</th>
+<th>&#x503A;&#x6743;&#x4EBA;</th>
+<th>&#x503A;&#x52A1;&#x4EBA;</th>
+<th>&#x8FD8;&#x6B3E;&#x65E5;&#x671F;</th>
+<th>&#x6302;&#x8D77;</th>
+<th>&#x91D1;&#x989D;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>creditor</td>
+<td>debtor</td>
+<td>ddl</td>
+<td>pending</td>
+<td>value</td>
+</tr>
+<tr>
+<td>string</td>
+<td>address</td>
+<td>address</td>
+<td>uint256</td>
+<td>address</td>
+<td>uint256</td>
+</tr>
+</tbody>
+</table>
+<p>&#x6CE8;&#x610F;&#xFF01;&#xFF1A;&#x8FD9;&#x4E2A;id&#x662F;&#x56E0;&#x4E3A;&#x8FD9;&#x4E2A;&#x5947;&#x602A;&#x7684;&#x6570;&#x636E;&#x5E93;&#x9700;&#x8981;&#x4E3B;&#x7801;&#xFF0C;&#x4F46;&#x5B9E;&#x9645;&#x4E0A;&#x65E0;&#x7528;&#xFF0C;&#x6240;&#x4EE5;&#x5747;&#x8BBE;&#x4E3A;&#x4E00;&#x4E2A;&#x5168;&#x5C40;&#x53D8;&#x91CF;&#xFF08;&#x8FD9;&#x4E2A;&#x4E3B;&#x7801;&#x7ADF;&#x7136;&#x662F;&#x53EF;&#x4EE5;&#x91CD;&#x590D;&#x7684;</p>
+</li>
+<li>
+<p>&#x529F;&#x80FD;&#x4E00;&#xFF1A;&#x503A;&#x6743;&#x4EBA;&#x53D1;&#x8D77;&#xFF0C;&#xFF08;&#x503A;&#x6743;&#x4EBA;&#xFF0C;&#x503A;&#x52A1;&#x4EBA;&#xFF0C;&#x8FD8;&#x6B3E;&#x65E5;&#x671F;&#xFF09;&#x5982;&#x6709;&#x5219;&#x76F4;&#x63A5;&#x4FEE;&#x6539;value&#xFF0C;&#x5426;&#x5219;&#x63D2;&#x5165;&#x4E00;&#x6761;&#x65B0;&#x8BB0;&#x5F55;</p>
+</li>
+<li>
+<p>&#x529F;&#x80FD;&#x4E8C;&#xFF1A;&#x503A;&#x6743;&#x4EBA;&#x53D1;&#x8D77;&#xFF0C;&#x51CF;&#x5C11;&#x8BB0;&#x5F55;&#x91D1;&#x989D;&#xFF0C;&#x63D2;&#x5165;&#x4E00;&#x6761;&#x65B0;&#x8BB0;&#x5F55;&#x91D1;&#x989D;&#x4E3A;&#x51CF;&#x5C11;&#x7684;&#x91D1;&#x989D;&#xFF08;&#x201C;&#x63D2;&#x5165;&#x201D;&#x540C;&#x6837;&#x6309;&#x7167;&#x529F;&#x80FD;&#x4E00;&#x7684;&#x65B9;&#x5F0F;&#x5148;&#x505A;&#x5224;&#x65AD;&#xFF0C;&#x770B;&#x662F;&#x4FEE;&#x6539;&#x8FD8;&#x662F;&#x63D2;&#x5165;&#xFF09;</p>
+</li>
+<li>
+<p>&#x529F;&#x80FD;&#x4E09;&#xFF1A;&#x503A;&#x6743;&#x4EBA;&#x53D1;&#x8D77;&#xFF0C;&#x5411;&#x94F6;&#x884C;&#x8D26;&#x6237;&#x7533;&#x8BF7;&#x8F6C;&#x79FB;&#x503A;&#x5238;&#xFF0C;&#x8BBE;&#x7F6E;pending&#x4E3A;&#x94F6;&#x884C;&#x8D26;&#x6237;&#xFF1B;&#x94F6;&#x884C;&#x53EF;&#x4EE5;&#x53D6;&#x6D88;pending&#xFF08;&#x8BBE;&#x4E3A;0&#xFF09;&#x5C06;&#x503A;&#x6743;&#x4EBA;&#x6539;&#x4E3A;&#x81EA;&#x5DF1;&#xFF08;&#x201C;&#x6539;&#x201D;&#x540C;&#x6837;&#x6309;&#x7167;&#x529F;&#x80FD;&#x4E00;&#x7684;&#x65B9;&#x5F0F;&#x5148;&#x505A;&#x5224;&#x65AD;&#xFF0C;&#x770B;&#x662F;&#x4FEE;&#x6539;&#x54EA;&#x4E2A;&#xFF09;&#x3002;</p>
+</li>
+<li>
+<p>&#x529F;&#x80FD;&#x56DB;&#xFF1A;&#x503A;&#x6743;&#x4EBA;&#x53D1;&#x8D77;&#xFF0C;&#xFF08;&#x5224;&#x65AD;&#x65F6;&#x95F4;&#xFF09;&#x5220;&#x9664;&#x4E00;&#x6761;&#x8BB0;&#x5F55;</p>
+</li>
+</ul>
+<h2 class="mume-header" id="%E6%9C%80%E7%BB%88%E5%AE%9E%E7%8E%B0">&#x6700;&#x7EC8;&#x5B9E;&#x73B0;</h2>
+
+<ol>
+<li><a href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1">&#x6570;&#x636E;&#x5E93;&#x8BBE;&#x8BA1;</a>
+<ul>
+<li>
+<p>debt&#x8868;</p>
+<table>
+<thead>
+<tr>
+<th>&#x6240;&#x6709;&#x8005;(&#x4E3B;&#x7801;)</th>
+<th>&#x503A;&#x6743;&#x4EBA;</th>
+<th>&#x503A;&#x52A1;&#x4EBA;</th>
+<th>&#x8FD8;&#x6B3E;&#x65E5;&#x671F;</th>
+<th>&#x91D1;&#x989D;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>owner</td>
+<td>creditor</td>
+<td>debtor</td>
+<td>ddl</td>
+<td>value</td>
+</tr>
+<tr>
+<td>string</td>
+<td>string</td>
+<td>string</td>
+<td>int</td>
+<td>int</td>
+</tr>
+</tbody>
+</table>
+<p>&#x5176;&#x4E2D;&#x4FDD;&#x8BC1;(owner,creditor,debtor,ddl)&#x552F;&#x4E00;&#x786E;&#x5B9A;&#x4E00;&#x6761;&#x8BB0;&#x5F55;&#x3002;</p>
+<p>&#x5C06;owner&#x548C;creditor&#x4E0D;&#x4E00;&#x81F4;&#x7684;&#x6B20;&#x6761;&#x5B9A;&#x4E49;&#x4E3A;<a href="#%E6%8C%82%E8%B5%B7%E6%80%81">&#x6302;&#x8D77;&#x6001;</a>&#xFF0C;&#x5C06;&#x4E00;&#x81F4;&#x7684;&#x6B20;&#x6761;&#x5B9A;&#x4E49;&#x4E3A;<a href="#%E6%AD%A3%E5%B8%B8%E6%80%81">&#x6B63;&#x5E38;&#x6001;</a>&#x3002;</p>
+</li>
+<li>
+<p>account&#x8868;</p>
+<table>
+<thead>
+<tr>
+<th>&#x7528;&#x6237;&#x540D;(&#x4E3B;&#x7801;)</th>
+<th>&#x516C;&#x53F8;&#x7C7B;&#x578B;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>type</td>
+</tr>
+<tr>
+<td>address</td>
+<td>int</td>
+</tr>
+</tbody>
+</table>
+<p>&#x5176;&#x4E2D;&#x4FDD;&#x8BC1;(id)&#x552F;&#x4E00;&#x786E;&#x5B9A;&#x4E00;&#x6761;&#x8BB0;&#x5F55;&#x3002;</p>
+</li>
+</ul>
+</li>
+<li><a href="#%E8%BF%94%E5%9B%9E%E7%A0%81">&#x8FD4;&#x56DE;&#x7801;</a>
+<ul>
+<li>MORTGAGE_TO_DEBTOR&#xFF1A;&#x4EE5;&#x6B20;&#x6761;&#x5411;&#x94F6;&#x884C;&#x62B5;&#x62BC;&#xFF0C;&#x5176;&#x4E2D;&#x6B20;&#x6761;&#x7684;&#x503A;&#x52A1;&#x4EBA;&#x5C31;&#x662F;&#x8FD9;&#x4E2A;&#x94F6;&#x884C;&#xFF0C;&#x4ECE;&#x800C;&#x5F15;&#x53D1;&#x9519;&#x8BEF;&#x3002;</li>
+<li>NOT_BANK&#xFF1A;&#x5F53;&#x67D0;&#x64CD;&#x4F5C;&#x5BF9;&#x8C61;&#x5FC5;&#x987B;&#x662F;&#x94F6;&#x884C;&#xFF0C;&#x4F46;&#x4E0D;&#x662F;&#x94F6;&#x884C;&#xFF0C;&#x5F15;&#x53D1;&#x9519;&#x8BEF;&#x3002;</li>
+<li>REGISTERED&#xFF1A;&#x8BE5;&#x5730;&#x5740;&#x5DF2;&#x6CE8;&#x518C;&#x8D26;&#x6237;&#xFF0C;&#x5F15;&#x53D1;&#x9519;&#x8BEF;&#x3002;</li>
+<li>ID_EXIST&#xFF1A;&#x6CE8;&#x518C;&#x65F6;&#x8BE5;&#x7528;&#x6237;&#x540D;&#x5DF2;&#x5B58;&#x5728;&#xFF0C;&#x5F15;&#x53D1;&#x9519;&#x8BEF;&#x3002;</li>
+<li>OVERFLOW&#xFF1A;&#x8F6C;&#x79FB;&#x6B20;&#x6761;&#x65F6;&#xFF0C;&#x6307;&#x5B9A;&#x91D1;&#x989D;&#x8D85;&#x51FA;&#x6B20;&#x6761;&#x91D1;&#x989D;&#xFF0C;&#x5F15;&#x53D1;&#x9519;&#x8BEF;&#x3002;</li>
+<li>NOT_EXIST&#xFF1A;&#x8BE5;&#x6B20;&#x6761;&#x4E0D;&#x5B58;&#x5728;&#xFF0C;&#x5F15;&#x53D1;&#x9519;&#x8BEF;&#x3002;</li>
+<li>DB_ERR&#xFF1A;&#x6570;&#x636E;&#x5E93;&#x64CD;&#x4F5C;&#x51FA;&#x9519;&#x3002;</li>
+<li>SUCC&#xFF1A;&#x6210;&#x529F;&#x3002;</li>
+</ul>
+</li>
+<li><a href="#%E5%87%BD%E6%95%B0">&#x51FD;&#x6570;</a>
+<ul>
+<li>register
+<ul>
+<li>&#x63CF;&#x8FF0;&#xFF1A;&#x516C;&#x53F8;&#x8D26;&#x6237;&#x6CE8;&#x518C;</li>
+<li>&#x516C;&#x6709;&#xFF1A;&#x662F;</li>
+<li>&#x53C2;&#x6570;&#xFF1A;
+<ul>
+<li>id&#xFF1A;&#x516C;&#x53F8;&#x8D26;&#x6237;&#x540D;</li>
+<li>type&#xFF1A;&#x516C;&#x53F8;&#x7C7B;&#x578B;</li>
+</ul>
+</li>
+<li>&#x8FD4;&#x56DE;&#x503C;&#xFF1A;
+<ul>
+<li><a href="#&#x8FD4;&#x56DE;&#x7801;">&#x8FD4;&#x56DE;&#x7801;</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>select
+<ul>
+<li>&#x63CF;&#x8FF0;&#xFF1A;&#x67E5;&#x8BE2;&#x6240;&#x6709;&#x8005;&#x4E3A;&#x81EA;&#x5DF1;&#x7684;&#x5168;&#x90E8;debt</li>
+<li>&#x516C;&#x6709;&#xFF1A;&#x662F;</li>
+<li>&#x53C2;&#x6570;&#xFF1A;&#x65E0;</li>
+<li>&#x8FD4;&#x56DE;&#x503C;&#xFF1A;
+<ul>
+<li>DEBT&#x6570;&#x7EC4;</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>insert_core
+<ul>
+<li>&#x63CF;&#x8FF0;&#xFF1A;&#x6DFB;&#x52A0;&#x4E00;&#x4E2A;&#x6B20;&#x6761;&#xFF0C;&#x5982;&#x679C;&#x5B58;&#x5728;&#x76F8;&#x5173;&#x6B20;&#x6761;&#x66F4;&#x65B0;&#x5176;value&#xFF0C;&#x5426;&#x5219;&#x63D2;&#x5165;&#x4E00;&#x6761;&#x65B0;&#x7684;&#x6B20;&#x6761;</li>
+<li>&#x516C;&#x6709;&#xFF1A;&#x5426;</li>
+<li>&#x53C2;&#x6570;&#xFF1A;
+<ul>
+<li>id&#xFF1A;&#x6B20;&#x6761;&#x7684;onwner</li>
+<li>creditor&#xFF1A;&#x6B20;&#x6761;&#x7684;creditor</li>
+<li>debtor&#xFF1A;&#x6B20;&#x6761;&#x7684;debtor</li>
+<li>ddl&#xFF1A;&#x6B20;&#x6761;&#x7684;ddl</li>
+<li>value&#xFF1A;&#x6B20;&#x6761;&#x7684;value</li>
+</ul>
+</li>
+<li>&#x8FD4;&#x56DE;&#x503C;&#xFF1A;
+<ul>
+<li>&#x8FD4;&#x56DE;&#x7801;</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>insert
+<ul>
+<li>&#x63CF;&#x8FF0;&#xFF1A;&#x6DFB;&#x52A0;&#x4E00;&#x4E2A;&#x6B20;&#x6761;&#xFF0C;&#x5176;&#x4E2D;owner&#x548C;creditor&#x5747;&#x4E3A;&#x81EA;&#x5DF1;</li>
+<li>&#x516C;&#x6709;&#xFF1A;&#x662F;</li>
+<li>&#x53C2;&#x6570;&#xFF1A;
+<ul>
+<li>debtor&#xFF1A;&#x6B20;&#x6761;&#x7684;debtor</li>
+<li>ddl&#xFF1A;&#x6B20;&#x6761;&#x7684;ddl</li>
+<li>value&#xFF1A;&#x6B20;&#x6761;&#x7684;value</li>
+</ul>
+</li>
+<li>&#x8FD4;&#x56DE;&#x503C;&#xFF1A;
+<ul>
+<li>&#x8FD4;&#x56DE;&#x7801;</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>is_bank
+<ul>
+<li>&#x63CF;&#x8FF0;&#xFF1A;&#x5224;&#x65AD;&#x8BE5;&#x516C;&#x53F8;&#x8D26;&#x6237;&#x662F;&#x4E0D;&#x662F;&#x94F6;&#x884C;</li>
+<li>&#x516C;&#x6709;&#xFF1A;&#x5426;</li>
+<li>&#x53C2;&#x6570;&#xFF1A;
+<ul>
+<li>bank&#xFF1A;&#x5224;&#x65AD;&#x7684;&#x94F6;&#x884C;&#x8D26;&#x6237;&#x540D;</li>
+</ul>
+</li>
+<li>&#x8FD4;&#x56DE;&#x503C;&#xFF1A;
+<ul>
+<li>&#x8FD4;&#x56DE;&#x7801;</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>mortgage
+<ul>
+<li>&#x63CF;&#x8FF0;&#xFF1A;&#x7528;&#x90E8;&#x5206;&#x6216;&#x5168;&#x90E8;&#x6B63;&#x5E38;&#x6001;&#x7684;&#x6B20;&#x6761;&#x5411;&#x94F6;&#x884C;&#x7533;&#x8BF7;&#x62B5;&#x62BC;&#xFF0C;&#x5C06;owner&#x8BBE;&#x4E3A;&#x94F6;&#x884C;&#xFF0C;creditor&#x4ECD;&#x8BBE;&#x4E3A;&#x81EA;&#x5DF1;&#xFF0C;&#x6B20;&#x6761;&#x7531;&#x6B63;&#x5E38;&#x6001;&#x8F6C;&#x53D8;&#x4E3A;&#x6302;&#x8D77;&#x6001;&#x3002;</li>
+<li>&#x516C;&#x6709;&#xFF1A;&#x662F;</li>
+<li>&#x53C2;&#x6570;&#xFF1A;
+<ul>
+<li>bank&#xFF1A;&#x94F6;&#x884C;&#x8D26;&#x6237;&#x540D;</li>
+<li>debtor&#xFF1A;&#x6B20;&#x6761;&#x7684;debtor</li>
+<li>ddl&#xFF1A;&#x6B20;&#x6761;&#x7684;ddl</li>
+<li>value&#xFF1A;&#x9700;&#x8981;&#x62B5;&#x62BC;&#x7684;value</li>
+</ul>
+</li>
+<li>&#x8FD4;&#x56DE;&#x503C;&#xFF1A;
+<ul>
+<li>&#x8FD4;&#x56DE;&#x7801;</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>permit
+<ul>
+<li>&#x63CF;&#x8FF0;&#xFF1A;&#x94F6;&#x884C;&#x5904;&#x7406;&#x6307;&#x5B9A;&#x62B5;&#x62BC;&#x7533;&#x8BF7;&#xFF0C;&#x82E5;&#x540C;&#x610F;&#x5C06;creditor&#x8BBE;&#x4E3A;&#x94F6;&#x884C;&#xFF0C;&#x82E5;&#x62D2;&#x7EDD;&#x5C06;owner&#x8BBE;&#x4E3A;&#x7533;&#x8BF7;&#x8005;&#xFF0C;&#x6B20;&#x6761;&#x7531;&#x6302;&#x8D77;&#x6001;&#x8F6C;&#x53D8;&#x4E3A;&#x6B63;&#x5E38;&#x6001;&#x3002;</li>
+<li>&#x516C;&#x6709;&#xFF1A;&#x662F;</li>
+<li>&#x53C2;&#x6570;&#xFF1A;
+<ul>
+<li>boolean&#xFF1A;0&#x4E3A;&#x62D2;&#x7EDD;&#xFF0C;&#x975E;0&#x4E3A;&#x540C;&#x610F;</li>
+<li>creditor&#xFF1A;&#x6B20;&#x6761;&#x7684;creaditor</li>
+<li>debtor&#xFF1A;&#x6B20;&#x6761;&#x7684;debtor</li>
+<li>ddl&#xFF1A;&#x6B20;&#x6761;&#x7684;ddl</li>
+</ul>
+</li>
+<li>&#x8FD4;&#x56DE;&#x503C;&#xFF1A;
+<ul>
+<li>&#x8FD4;&#x56DE;&#x7801;</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>creditAssignment
+<ul>
+<li>&#x63CF;&#x8FF0;&#xFF1A;&#x8F6C;&#x79FB;&#x90E8;&#x5206;&#x6216;&#x5168;&#x90E8;&#x6B63;&#x5E38;&#x6001;&#x7684;&#x6B20;&#x6761;&#x7ED9;&#x522B;&#x4EBA;&#xFF0C;&#x5982;&#x679C;&#x76EE;&#x6807;&#x662F;&#x6B20;&#x6761;&#x7684;debtor&#x89C6;&#x4E3A;&#x8FD8;&#x6B3E;&#xFF0C;&#x5982;&#x679C;&#x76EE;&#x6807;&#x4E0D;&#x662F;&#x6B20;&#x6761;&#x7684;debtor&#x89C6;&#x4E3A;&#x4EA4;&#x6613;&#x6B20;&#x6761;</li>
+<li>&#x516C;&#x6709;&#xFF1A;&#x662F;</li>
+<li>&#x53C2;&#x6570;&#xFF1A;
+<ul>
+<li>creditor&#xFF1A;&#x8F6C;&#x79FB;&#x76EE;&#x6807;</li>
+<li>debtor&#xFF1A;&#x6B20;&#x6761;&#x7684;debtor</li>
+<li>ddl&#xFF1A;&#x6B20;&#x6761;&#x7684;ddl</li>
+<li>value&#xFF1A;&#x9700;&#x8981;&#x8F6C;&#x79FB;&#x7684;value</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h2 class="mume-header" id="%E5%88%86%E5%B7%A5">&#x5206;&#x5DE5;</h2>
+
+<ul>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" checked> &#x5B9E;&#x73B0;&#x65B9;&#x6848;&#xFF1A;&#x8C37;&#x6B63;&#x9633;&#xFF0C;&#x9648;&#x632F;&#x5B87;</li>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" checked> Database&#xFF1A;&#x8C37;&#x6B63;&#x9633;</li>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" checked> &#x529F;&#x80FD;&#x4E00;&#xFF1A;&#x9648;&#x5609;&#x5B81;</li>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" checked> &#x529F;&#x80FD;&#x4E8C;&#xFF1A;&#x9648;&#x632F;&#x5B87;</li>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" checked> &#x529F;&#x80FD;&#x4E09;&#xFF1A;&#x9648;&#x5609;&#x5B81;</li>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" checked> &#x529F;&#x80FD;&#x56DB;&#xFF1A;&#x9648;&#x632F;&#x5B87;</li>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" checked> Debug&#x53CA;&#x4EE3;&#x7801;&#x4FEE;&#x6539;&#xFF1A;&#x8C37;&#x6B63;&#x9633;</li>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" checked> &#x6587;&#x6863;&#xFF1A;&#x8C37;&#x6B63;&#x9633;</li>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox"> &#x6D4B;&#x8BD5;</li>
+</ul>
+</div>
+      </div>
+      
+      
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    </body></html>

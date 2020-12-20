@@ -5,12 +5,12 @@
 - [Requirements](#Requirements)
 - [初版实现方案](#初版实现方案)
 - [最终实现](#最终实现)
-- [分工](#分工)
 - [测试及结果](#测试及结果)
+- [分工](#分工)
 
 ## <span id="Requirements">Requirements</span>
 
-- 功能一：实现采购商品—签发应收账款 交易上链。例如车企从轮胎公司购买一批轮胎并签订应收账款单据。
+- 功能一：实现采购商品—签发应收账款交易上链。例如车企从轮胎公司购买一批轮胎并签订应收账款单据。
 - 功能二：实现应收账款的转让上链，轮胎公司从轮毂公司购买一笔轮毂，便将于车企的应收账款单据部分转让给轮毂公司。轮毂公司可以利用这个新的单据去融资或者要求车企到期时归还钱款。
 - 功能三：利用应收账款向银行融资上链，供应链上所有可以利用应收账款单据向银行申请融资。
 - 功能四：应收账款支付结算上链，应收账款单据到期时核心企业向下游企业支付相应的欠款。
@@ -147,39 +147,39 @@ Be detailed in [2020.docx](https://github.com/guzy0324/block_chain_project/relea
 
 - 在链上部署Debt合约后，首先利用拥有的账户地址进行注册。注册情况如下表所示：
 
-|       | 地址                                       | id    | 类型  |
-| ----- | ------------------------------------------ | ----- | ----- |
-| 账户1 | 0x1f9ef5400aca6856fa0da557707b5066c7e80c2a | cmp3  | OTHER |
-| 账户2 | 0x3ffa7b39dbc33deb632f8f93f5456431ea8f3b9f | cmp2  | OTHER |
-| 账户3 | 0x5a7f68319d872c697fce19bb327f42c272f2db80 | cmp1  | OTHER |
-| 账户4 | 0xe1e2188ae94eb88e1295cd6fd11f2a1c0b582693 | bank1 | BANK  |
+  |       | 地址                                       | id    | 类型  |
+  | ----- | ------------------------------------------ | ----- | ----- |
+  | 账户1 | 0x1f9ef5400aca6856fa0da557707b5066c7e80c2a | cmp3  | OTHER |
+  | 账户2 | 0x3ffa7b39dbc33deb632f8f93f5456431ea8f3b9f | cmp2  | OTHER |
+  | 账户3 | 0x5a7f68319d872c697fce19bb327f42c272f2db80 | cmp1  | OTHER |
+  | 账户4 | 0xe1e2188ae94eb88e1295cd6fd11f2a1c0b582693 | bank1 | BANK  |
 
-​		注册过程调用的函数为register( )，以账户1的注册为例展示注册的具体过程如下图：
+  注册过程调用的函数为register( )，以账户1的注册为例展示注册的具体过程如下图：
 
-<img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/registerExample.png" style="zoom:70%;" />
+  <img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/registerExample.png" style="zoom:70%;" />
 
-​		注册过程还设置了保护机制，即无法用同一地址注册两个账户，保证了账户和地址一一对应的关系：
+  注册过程还设置了保护机制，即无法用同一地址注册两个账户，保证了账户和地址一一对应的关系：
 
-<img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/registerFalseExample.png" style="zoom:70%;" />
-
-​											
+  <img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/registerFalseExample.png" style="zoom:70%;" />
 
 - 注册完成后，开始创建各个账户之间的账单。完成创建后账单的具体情况如下：
 
-|       | id    | creditor | debtor | ddl  | value |
-| ----- | ----- | -------- | ------ | ---- | ----- |
-| 账单1 | cmp2  | cmp2     | cmp1   | 500  | 500   |
-| 账单2 | cmp1  | cmp1     | cmp3   | 500  | 350   |
-| 账单3 | bank1 | bank1    | cmp3   | 500  | 400   |
-| 账单4 | bank1 | bank1    | cmp1   | 500  | 200   |
+  |       | owner | creditor | debtor | ddl  | value |
+  | ----- | ----- | -------- | ------ | ---- | ----- |
+  | 账单1 | cmp2  | cmp2     | cmp1   | 500  | 500   |
+  | 账单2 | cmp1  | cmp1     | cmp3   | 500  | 350   |
+  | 账单3 | bank1 | bank1    | cmp3   | 500  | 400   |
+  | 账单4 | bank1 | bank1    | cmp1   | 500  | 200   |
 
-​		创建账单调用的函数为insert( )，以账单1的创建为例展示创建过程如下：
+  创建账单调用的函数为insert( )，以账单1的创建为例展示创建过程如下：
 
-<img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/insertExample.png" style="zoom:70%;" />
+  <img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/insertExample.png" style="zoom:70%;" />
 
-​		且该账单可以被拥有者（即cmp2）通过select( )函数查询：
+  且该账单可以被拥有者（即cmp2）通过select( )函数查询：
 
-<img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/selectExample.png" style="zoom:70%;" />
+  <img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/selectExample.png" style="zoom:70%;" />
+
+  该过程实现了要求中的功能一，即实现采购商品—签发应收账款交易上链。交易双方在完成商品交易后通过insert( )函数创建账单并存储在数据库中（上链）。
 
 - 这时cmp1试图通过将cmp3的欠款用于抵消其欠cmp2的款项：
 
@@ -198,6 +198,16 @@ Be detailed in [2020.docx](https://github.com/guzy0324/block_chain_project/relea
   且在bank1的账单中，cmp3的欠款数额增加（由400变为600）：
 
   <img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/assignSucceedExample2.png" style="zoom:70%;" />
+
+  该过程实现了要求中的功能二：实现应收账款的转让上链。账户A可用账户B对其的欠款来偿还自己对另一账户C的欠款，从而将将债务关系转移到B与C之间。
+
+  同时assign( )函数亦能够实现还款的功能，只需把传入参数中的“creditor”和“debtor”设为相同的值（且必须是当前账户的债务人），则可实现还款，如下图：
+
+  <img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/assignBack.png" style="zoom:70%;" />
+
+  还款后，当前账户中的响应账单被清除：
+
+  <img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/assignBackSucceed.png" style="zoom:70%;" />
 
 - 这时cmp2试图将与cmp1的账单用于向bank1抵押贷款：
 

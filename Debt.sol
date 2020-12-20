@@ -39,6 +39,7 @@ contract Debt
         tf.createTable("account", "id", "type");
     }
 
+    int MORTGAGE_FROM_Debtor = -7
     int DB_ERR = -6;
     int OVERFLOW = -5;
     int BANK_NOT_EXIST = -4;
@@ -46,7 +47,7 @@ contract Debt
     int ID_EXIST = -2;
     int REGISTERED = -1;
     int SUCC = 0;
-
+    
     /*
     描述 : 公司注册
     参数 ：
@@ -163,7 +164,7 @@ contract Debt
 
 
     /*
-    描述 :  债权人发起，向银行账户申请转移债券，设置pending为银行账户
+    描述 :  债权人发起，向银行账户申请转移债券
     参数 ：
             债权人地址，债务人地址，还款日期
 
@@ -172,6 +173,9 @@ contract Debt
     */
     function mortgage(string bank, string debtor, int ddl, int value) public returns (int)
     {
+        if(bank == debtor){
+            return MORTGAGE_FROM_Debtor;
+        }
         Table table;
         Condition condition;
         Entries entries;
@@ -203,11 +207,6 @@ contract Debt
         }
         else
         {
-            entry.set("value", value);
-            if (table.insert(bank, entry) != 1)
-            {
-                return DB_ERR;
-            }
             if (cur_value == value)
             {
                 if (table.remove(companies[msg.sender].id, condition) != 1)
@@ -223,7 +222,11 @@ contract Debt
                     return DB_ERR;
                 }
             }
-
+            entry.set("value", value);
+            if (addTransaction(bank, debtor, ddl) != 0)
+            {
+                return DB_ERR;
+            }
         }
         return SUCC;
     }
@@ -281,32 +284,71 @@ contract Debt
     */
     function creditAssignment(string creditor, string debtor, int ddl, int value) public returns (int)
     {
-        Table table = tf.openTable("debt");
-        Condition condition = table.newCondition();
-        condition.EQ("creditor", companies[msg.sender].id);
-        condition.EQ("debtor", debtor);
-        condition.EQ("ddl", ddl);
+        if(creditor != debtor){
+            Table table = tf.openTable("debt");
+            Condition condition = table.newCondition();
+            condition.EQ("creditor", companies[msg.sender].id);
+            condition.EQ("debtor", debtor);
+            condition.EQ("ddl", ddl);
 
-        Entries entries = table.select(companies[msg.sender].id, condition);
-        if (entries.size() == 0)  //指定债权不存在
-        {
-            return NOT_EXIST;
-        }
-        Entry entry = entries.get(0);
-        int cur_value = entry.getInt("value");
-        if (cur_value < value)  //指定债权金额不足
-        {
-            return OVERFLOW;
-        }
-        else  //债权金额与转让金额相等
-        {
-            //更新转让债权人的新债权记录
-            entry.set("creditor", creditor);
-            entry.set("value", value);
-            if (table.update(creditor, entry, condition) != 1)     //数据库操作异常
+            Entries entries = table.select(companies[msg.sender].id, condition);
+            if (entries.size() == 0)  //指定债权不存在
             {
-                return DB_ERR;
+                return NOT_EXIST;
             }
+            Entry entry = entries.get(0);
+            int cur_value = entry.getInt("value");
+            if (cur_value < value)  //指定债权金额不足
+            {
+                return OVERFLOW;
+            }
+            else  
+            {
+                //债权金额与转让金额相等
+                if(cur_value == value)
+                {
+                    if(table.remove(companies[msg.sender].id, condition) != 1)
+                    {
+                        return DB_ERR;
+                    }
+                }
+                else
+                {
+                    entry = table.newEntry();
+                    entry.set("creditor", companies[msg.sender].id);
+                    entry.set("debtor", debtor);
+                    entry.set("ddl", ddl);
+                    entry.set("value", cur_value - value);
+                    if (table.insert(companies[msg.sender].id, entry) != 1)     //数据库操作异常
+                    {
+                        return DB_ERR;
+                    }
+                }
+                //更新转让债权人的新债权记录
+                entry.set("creditor", creditor);
+                entry.set("value", value);
+                if (addTransaction(creditor, debtor, ddl) != 0)     //数据库操作异常
+                {
+                    return DB_ERR;
+                }
+                
+            }
+            return SUCC;
+        }
+        else
+        {
+            Table table = tf.openTable("debt");
+            Condition condition = table.newCondition();
+            condition.EQ("creditor", companies[msg.sender].id);
+            condition.EQ("debtor", debtor);
+            condition.EQ("ddl", ddl);
+            Entries entries = table.select(companies[msg.sender].id, condition);
+            if (entries.size() == 0)  //指定债权不存在
+            {
+                return NOT_EXIST;
+            }
+            Entry entry = entries.get(0);
+            int cur_value = entry.getInt("value");
             if (cur_value > value)
             {
                 entry = table.newEntry();
@@ -319,8 +361,33 @@ contract Debt
                     return DB_ERR;
                 }
             }
+            else
+            {
+                if(cur_value == value)
+                {
+                    if(table.remove(companies[msg.sender].id, condition) != 1)
+                    {
+                        return DB_ERR;
+                    }
+                }
+                else
+                {
+                    entry = table.newEntry();
+                    entry.set("creditor", companies[msg.sender].id);
+                    entry.set("debtor", debtor);
+                    entry.set("ddl", ddl);
+                    entry.set("value", value - cur_value);
+                    if (table.insert(companies[msg.sender].id, entry) != 1)     //数据库操作异常
+                    {
+                        return DB_ERR;
+                    }
+                    if(table.remove(companies[msg.sender].id, condition) != 1)
+                    {
+                        return DB_ERR;
+                    }
+                }
+            }
         }
-        return SUCC;
     }
 
     /*

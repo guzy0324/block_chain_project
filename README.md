@@ -205,7 +205,7 @@ Be detailed in [2020.docx](https://github.com/guzy0324/block_chain_project/relea
 
   <img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/assignBack.png" style="zoom:70%;" />
 
-  还款后，当前账户中的响应账单被清除：
+  还款后，当前账户中的相应账单被清除：
 
   <img src="https://github.com/guzy0324/block_chain_project/blob/main/Pic/assignBackSucceed.png" style="zoom:70%;" />
 
